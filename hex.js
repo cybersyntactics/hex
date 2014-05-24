@@ -1,205 +1,3 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<style>
-
-body { 
-  margin: 0;
-  padding: 0;
-}
-
-.playArea {
-	position: absolute;
-	top: 0;
-	left: 0;
-}
-
-svg text {
-  fill: grey;
-  font: 20px serif;
-  text-anchor: end;
-}
-
-svg .hex {
-	fill: white;
-	stroke: black; /* #444; */
-}
-
-svg .hex.goal-red {
-	fill: lightpink;
-}
-
-svg .hex.goal-blue {
-	fill: lightblue;
-}
-
-svg .hex.goal-red.goal-blue {
-	fill: thistle;
-}
-
-svg .hex.locked.red {
-	fill: red;
-}
-
-svg .hex.locked.blue {
-	fill: blue;
-}
-
-/*
-svg .hex.locked.checked.blue {
-	fill: darkblue;
-}
-
-svg .hex.locked.checked.red {
-	fill: darkred;
-}
-*/
-
-/*
-svg .hex:hover {
-	fill: red;
-	stroke: lightgrey;
-}*/
-
-svg g.hexGroup text {
-	text-anchor: middle;
-	font-size: 15px;
-}
-
-svg .guard {
-	fill: rgba(255,0,0, 0.0);
-}
-
-
-
-span {
-	font-family: Helvetica;
-	font-size: 18pt;
-	color: black;
-    text-shadow:
-    -1px -1px 0 #FFF,
-    1px -1px 0 #FFF,
-    -1px 1px 0 #FFF,
-    1px 1px 0 #FFF;	/* // http://stackoverflow.com/questions/4919076/outline-effect-to-text */
-}
-
-.header {
-	position: absolute;
-	margin-left: 10%;
-	top: 0;
-	left: 0;
-}
-
-.title{
-	font-size: 43pt;
-}
-.author {
-	font-size: 8pt;
-}
-
-.gameInfo {
-	position: absolute;
-	right: 10%;
-	top: 5%;
-}
-
-.turn {
-	float: right;
-	padding-right: 5px;
-	border-right: 1px solid lightgrey;
-	margin-right: 5px;
-	text-align: right;
-}
-
-.instructions {
-	float: right;
-/*	background-image: url(help.svg#svg_4);
-	background-size: contain;
-	min-width: 1em;
-	min-height: 1em;*/
-	-webkit-filter: drop-shadow( -1px -1px 0px #FFF )
-					drop-shadow( 1px -1px 0px #FFF )
-					drop-shadow( -1px 1px 0px #FFF )
-					drop-shadow( 1px 1px 0px #FFF );
-            filter: drop-shadow( -1px 1px 0px #FFF )
-					drop-shadow( 1px -1px 0px #FFF )
-					drop-shadow( -1px 1px 0px #FFF )
-					drop-shadow( 1px 1px 0px #FFF );            
-}
-
-.instructions a {
-}
-
-.instructions a:hover {
-	-webkit-filter: drop-shadow( 0px 0px 1px #FE0 );
-            filter: drop-shadow( 0px 0px 1px #FE0 );
-    cursor: pointer;
-}
-
-.turn .player.red {
-	color: red;
-}
-
-.turn .player.blue {
-	color: blue;
-}
-
-div#message {
-	position: relative;
-	width: 80%;
-	max-width: 600px;
-	height: 80%; 
-	margin: auto;
-	margin-top: 10%;
-	padding: 3px;
-	vertical-align: middle;
-	background-color: white;
-	box-shadow: 0 0 1em black;
-}
-
-div#message p {
-	margin: 5px;
-	display: block;
-}
-
-div#message .close {
-	display: block;
-	border: 2px solid black;
-	padding: 2px;
-	margin: 2px;
-	float: right;
-	font-family: Helvetica, sans-serif;
-	font-style: normal;
-	font-weight: bold;
-	text-decoration: none;
-	color: black;
-	line-height: .70;
-}
-
-div#message .close:hover {
-	-webkit-filter: drop-shadow( 0px 0px 1px #FE0 );
-            filter: drop-shadow( 0px 0px 1px #FE0 );
-}
-
-
-</style>
-<body>
-	<svg class="playArea" xmlns="http://www.w3.org/2000/svg" version="1.1" oncontextmenu="return false;"></svg>	
-	<div class="header">
-		<span class="title"><a href="https://en.wikipedia.org/wiki/Hex_(board_game)" target="_blank">H E X</a></span>
-		<br>
-		<span class="author">implemented by <a href="mailto:JonathanRL83@gmail.com" target="_blank">Jonathan Less</a></span>
-	</div>
-	<div class="gameInfo">
-		<span class="instructions"><a href="#instructions"></a></span>	
-		<span class="turn"><span class="player red">red</span>'s turn</span>
-	</div>
-</body>
-<script src="./d3.v3/d3.v3.min.js"></script>
-<script src="./rect.js"></script>
-<script src="./data.JSON"></script>
-<script src="./array.JSON"></script>
-<script>
-
 var PI = Math.PI;
 var cos = Math.cos;
 var sin = Math.sin;
@@ -207,7 +5,7 @@ var sqrt = Math.sqrt;
 
 var HEX_BORDER_COLOR = "black";
 var HEX_FILL_COLOR = "white";
-var HEX_SIZE = 40;
+var HEX_SIZE = 30;
 var HEX_BORDER_WIDTH = (HEX_SIZE/10);
 
 var BOARD_WIDTH = "innerWidth" in window ? window.innerWidth : document.documentElement.offsetWidth;
@@ -454,7 +252,7 @@ Hex.prototype.getNeighbors = function(hex) {
 }
 
 game = new Game();
-board = new HexGrid({mapType: "rhomb", width: 11, height: 11, origin: {x: "center", y: 100}, hexType: "point-top"});
+board = new HexGrid({mapType: "rhomb", width: 11, height: 11, origin: {x: "center", y: 80}, hexType: "point-top"});
 
 
 //function HexGrid(/* array */ map) {
@@ -748,7 +546,7 @@ document.getElementById("svg_button").addEventListener("load",function(){
 		if(!(tmpDiv = document.querySelector("#message"))) {
 			var tmpDiv = document.createElement("div");
 			tmpDiv.setAttribute("id", "message");
-			tmpDiv.innerHTML = "<a href=\"#\" class=\"close\">X</a><div><h3>How to play:</h3><p>Click on hexes on your turn to fill them in. Red wins by creating an unbroken chain of red hexes from the left edge to the right edge (including light red hexes). Blue wins by creating an ubroken chain of blue hexes from the top edge to the bottom edge (including light blue hexes). The purple corner hexes count for either red or blue.</p><h3>About:</h3><p>This was written mainly as a learning exercise. It should currently work in desktop sized webkit browsers. Send all comments and questions to <a href=\"mailto:JonathanRL83@gmail.com\">JonathanRL83@gmail.com</a>.</p><h4>Versions:</h4><ul><li>0.4 - (current version) - local 2 player feature complete desktop version.</li><li>0.5 - Mobile friendly</li><li>0.6 - Single player (AI)</li><li>0.7 - Networked multiplayer</li><li>0.8 - General code refactoring (may also take place in earlier versions)</li><li> 0.9 - Beta (bugfixes only)</li><li>1.0 - Final release</li></div>";
+			tmpDiv.innerHTML = "<a href=\"#\" class=\"close\">X</a><div><h3>How to play:</h3><p>Click on hexes on your turn to fill them in. Red wins by creating an unbroken chain of red hexes from the left edge to the right edge (including light red hexes). Blue wins by creating an ubroken chain of blue hexes from the top edge to the bottom edge (including light blue hexes). The purple corner hexes count for either red or blue. Right click + drag to move the map around. Use the scroll wheel to zoom in and out.</p><h3>About:</h3><p>This was written mainly as a learning exercise. It should currently work in desktop sized webkit browsers.</p><h4>Versions:</h4><ul><li>0.4 - (current version) - local 2 player feature complete desktop version.</li><li>0.5 - Mobile friendly</li><li>0.6 - Single player (AI)</li><li>0.7 - Networked multiplayer</li><li>0.8 - General code refactoring (may also take place in earlier versions)</li><li> 0.9 - Beta (bugfixes only)</li><li>1.0 - Final release</li></div>";
 			document.querySelector("body").appendChild(tmpDiv);
 			document.querySelector("#message .close").addEventListener('click', closeMessage, false);	
 		} else {
@@ -809,4 +607,3 @@ dragmap = function(e) {
 
 	board.draw();
 }
-</script>

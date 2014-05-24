@@ -1,0 +1,120 @@
+body { 
+  margin: 0;
+  padding: 0;
+}
+
+.playArea {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+span {
+	font-family: Helvetica;
+	font-size: 18pt;
+	color: black;
+    text-shadow:
+    -1px -1px 0 #FFF,
+    1px -1px 0 #FFF,
+    -1px 1px 0 #FFF,
+    1px 1px 0 #FFF;	/* // http://stackoverflow.com/questions/4919076/outline-effect-to-text */
+}
+
+.header {
+	position: absolute;
+	margin-left: 10%;
+	top: 0;
+	left: 0;
+}
+
+.title{
+	font-size: 54pt;
+}
+
+.title a {
+	text-decoration: none;
+	color: black;	
+}
+
+.author {
+	font-size: 8pt;
+}
+
+.gameInfo {
+	position: absolute;
+	right: 10%;
+	top: 5%;
+}
+
+.turn {
+	float: right;
+	padding-right: 5px;
+	border-right: 1px solid lightgrey;
+	margin-right: 5px;
+	text-align: right;
+}
+
+.instructions {
+	float: right;
+/*	background-image: url(help.svg#svg_4);
+	background-size: contain;
+	min-width: 1em;
+	min-height: 1em;*/
+	-webkit-filter: drop-shadow( -1px -1px 0px #FFF )
+					drop-shadow( 1px -1px 0px #FFF )
+					drop-shadow( -1px 1px 0px #FFF )
+					drop-shadow( 1px 1px 0px #FFF );
+            filter: drop-shadow( -1px 1px 0px #FFF )
+					drop-shadow( 1px -1px 0px #FFF )
+					drop-shadow( -1px 1px 0px #FFF )
+					drop-shadow( 1px 1px 0px #FFF );            
+}
+
+.instructions a {
+}
+
+.instructions a:hover {
+	-webkit-filter: drop-shadow( 0px 0px 1px #FE0 );
+            filter: drop-shadow( 0px 0px 1px #FE0 );
+    cursor: pointer;
+}
+
+.turn .player.red {
+	color: red;
+}
+
+.turn .player.blue {
+	color: blue;
+}
+
+div#message {
+	position: relative;
+	width: 80%;
+	max-width: 600px;
+	height: 80%; 
+	margin: auto;
+	margin-top: 5%;
+	padding: 3px;
+	vertical-align: middle;
+	background-color: white;
+	box-shadow: 0 0 1em black;
+}
+
+div#message p {
+	margin: 5px;
+	display: block;
+}
+
+div#message .close {
+	display: block;
+	border: 2px solid black;
+	padding: 2px;
+	margin: 2px;
+	float: right;
+	font-family: Helvetica, sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	text-decoration: none;
+	color: black;
+	line-height: .70;
+}
