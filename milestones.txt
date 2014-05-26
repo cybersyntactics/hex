@@ -1,4 +1,0 @@
-0.0 Basic Hex game
-0.1 The Game of War
-0.2 SVG Graphics
-0.3 Game Editor

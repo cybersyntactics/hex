@@ -1,106 +1,22 @@
-var PI = Math.PI;
-var cos = Math.cos;
-var sin = Math.sin;
-var sqrt = Math.sqrt;
-
-var HEX_BORDER_COLOR = "black";
-var HEX_FILL_COLOR = "white";
-var HEX_SIZE = 30;
-var HEX_BORDER_WIDTH = (HEX_SIZE/10);
-
-var BOARD_WIDTH = "innerWidth" in window ? window.innerWidth : document.documentElement.offsetWidth;
-var BOARD_HEIGHT = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
-console.log(BOARD_HEIGHT);
-
-d3.select(".playArea")
-	.attr("width", BOARD_WIDTH)
-	.attr("height", BOARD_HEIGHT);
-
-window.onresize = function() {
-	var new_board_width = "innerWidth" in window ? window.innerWidth : document.documentElement.offsetWidth;
-	var new_board_height = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
-	var playArea = document.getElementsByClassName("playArea")[0];
-	playArea.setAttribute("width", new_board_width);
-	playArea.setAttribute("height", new_board_height);
-}
-
-// Douglas Crockford
-function object(o) {
-    function F() {}
-    F.prototype = o;
-    return new F();
-}
-
-// http://stackoverflow.com/questions/201183/how-do-you-determine-equality-for-two-javascript-objects
-function equal(obj1, obj2) {
-    for (var i in obj1) {
-        if (obj1.hasOwnProperty(i)) {
-            if (!obj2.hasOwnProperty(i)) return false;
-            if (obj1[i] != obj2[i]) return false;
-        }
-    }
-    for (var i in obj2) {
-        if (obj2.hasOwnProperty(i)) {
-            if (!obj1.hasOwnProperty(i)) return false;
-            if (obj1[i] != obj2[i]) return false;
-        }
-    }
-    return true;
-}
-
-// http://stackoverflow.com/questions/171251/how-can-i-merge-properties-of-two-javascript-objects-dynamically
-// can probably add hasOwnProperty check. Or just use framework extend like underscore.js or jsquery.
-function merge(obj1, obj2) {
-  for (var p in obj2) {
-    try {
-      // Property in destination object set; update its value.
-      if ( obj2[p].constructor==Object ) {
-        obj1[p] = merge(obj1[p], obj2[p]);
-
-      } else {
-        obj1[p] = obj2[p];
-
-      }
-
-    } catch(e) {
-      // Property in destination object not set; create it and set its value.
-      obj1[p] = obj2[p];
-
-    }
-  }
-
-  return obj1;
-}
-
-function Origin(x, y) {
-	this.origin = {};
-	this.origin.x = x;
-	this.origin.y = y;
-}
-
-var originPoint = new Origin(0,0);
-//Hex.prototype = object(originPoint);
-
-
-
 /*
 *
 * Many thanks to http://www.redblobgames.com/grids/hexagons/ for the information on how to make hex grids!
 *
 */
 
-function Hex(q, r, origin, entities, type) {
-	this.q = q;
-	this.r = r;
-	this.type = type || "flat-top";
-	this.entities = entities;
-	this.origin = object(origin) || {"x": 0, "y" :0};
+function Hex(context) {  /* q, r, origin, entities, type, board */ 
+	this.q = context.q;
+	this.r = context.r;
+	this.type = context.type || "flat-top";
+	this.entities = context.entities || [];
+	this.board = context.board;
+	this.origin = object(context.origin) || {"x": 0, "y" :0};
 	this.center = this.getHexCenter();
-	this.size = HEX_SIZE;
-	this.style = {
-				  "stroke": HEX_BORDER_COLOR, 
-				  "stroke-width": HEX_BORDER_WIDTH, 
-				  "fill": HEX_FILL_COLOR
+	this.size = context.hexSize || HEX_SIZE;
+	this.style = context.style || {
+				  "stroke": context.hexBoarderColor || HEX_BORDER_COLOR, 
+				  "stroke-width": context.hexBoarderWidth || HEX_BORDER_WIDTH, 
+				  "fill": context.hexFillColor || HEX_FILL_COLOR
 				  };
 }
 
@@ -133,9 +49,9 @@ Hex.prototype.draw = function(hex) {
 
 		hex.center = hex.getHexCenter();
 		for(i = 0; i < 6; i++) { // 0..5
-			angle = 2 * PI / 6 * (i + typeMod);
-			x[i] = Math.round(hex.center.x + hex.size * cos(angle));
-			y[i] = Math.round(hex.center.y + hex.size * sin(angle));
+			angle = 2 * Math.PI / 6 * (i + typeMod);
+			x[i] = Math.round(hex.center.x + hex.size * Math.cos(angle));
+			y[i] = Math.round(hex.center.y + hex.size * Math.sin(angle));
 		}
 
 		pathTo = "M"+x[0]+","+y[0];
@@ -161,10 +77,10 @@ Hex.prototype.draw = function(hex) {
 			if(hex.entities[i].goal === "blue") {
 				hex.displayClasses += "goal-blue ";
 			}			
-			if(hex.entities[i].player === game.redPlayer) {
+			if(hex.entities[i].player === this.board.game.entities.redPlayer) {
 				hex.displayClasses += "red locked ";
 			}
-			if(hex.entities[i].player === game.bluePlayer) {
+			if(hex.entities[i].player === this.board.game.entities.bluePlayer) {
 				hex.displayClasses += "blue locked ";
 			}
 
@@ -203,12 +119,12 @@ Hex.prototype.getHexCenter = function(q, r, x, y){
 	}
 	//Should use class/prototype! as parameter!
 	if(this.type === "point-top") {
-		var new_x = (HEX_SIZE * sqrt(3) * (q + r/2)) + x;
-		var new_y = (HEX_SIZE * 3/2 * r) + y;
+		var new_x = (this.size * Math.sqrt(3) * (q + r/2)) + x;
+		var new_y = (this.size * 3/2 * r) + y;
 	} else {
-		var width = HEX_SIZE * 2;
-		var new_x = (HEX_SIZE * 3/2 * q) + x;
-		var new_y = (HEX_SIZE * sqrt(3) * (r + q/2)) + y;
+		var width = this.size * 2;
+		var new_x = (this.size * 3/2 * q) + x;
+		var new_y = (this.size * Math.sqrt(3) * (r + q/2)) + y;
 	}
 	return {"x" : new_x, "y" : new_y};
 }
@@ -245,22 +161,22 @@ Hex.prototype.getNeighbors = function(hex) {
 	for(var i = 0; i < 6; i++) {
 		var d = directions[i];
 		var hexId = "q" + (hex.q + d[0]) + "r" + (hex.r + d[1]);
-		if(board.Hexes[hexId]) neighbors.push(board.Hexes[hexId]);
+		if(this.board.Hexes[hexId]) neighbors.push(this.board.Hexes[hexId]);
 	}		
 
 	return neighbors;
 }
 
-game = new Game();
-board = new HexGrid({mapType: "rhomb", width: 11, height: 11, origin: {x: "center", y: 80}, hexType: "point-top"});
-
-
 //function HexGrid(/* array */ map) {
 function HexGrid(context) {
 	this.Hexes = {};
-	this.entities = [];
-	this.hexType = context.hexType;
+	this.entities = context.entities || [];
+	this.hexType = context.hexType || "flat-top";
 	this.origin = context.origin || {x: 0, y: 0};
+	this.game = context.game || game;
+	this.hexSize = context.hexSize || 30;
+	this.hexStyle = context.style || {stroke: "black", "stroke-width": this.hexSize/10, fill: "white"};
+
 	if(!!context) {
 		if(context.mapType === "rect") {
 			this.width = context.width || 1;
@@ -268,13 +184,13 @@ function HexGrid(context) {
 			if(context.mapOrient === "vertical") {
 				for (q = 0; q < this.height; q++) {
 					for (r = -Math.floor(q/2); r < this.width - Math.floor(q/2); r++) {
-						this.Hexes["q"+q+"r"+r] = new Hex(q, r /*, x, y*/);
+						this.Hexes["q"+q+"r"+r] = new Hex({q: q, r: r, board: this, hexSize: this.hexSize, style: this.hexStyle});
 					}
 				}
 			} else {
 				for (q = 0; q < this.height; q++) {
 					for (r = -Math.floor(q/2); r < this.width - Math.floor(q/2); r++) {
-						this.Hexes["q"+r+"r"+q] = new Hex(r, q /*, x, y*/);
+						this.Hexes["q"+r+"r"+q] = new Hex({q: q, r: r, board: this, hexSize: this.hexSize, style: this.hexStyle});
 					}
 				}				
 			}
@@ -284,11 +200,11 @@ function HexGrid(context) {
 			this.height = !!context.height ? context.height : 2;
 
 			if (context.origin.x === "center") {
-				this.origin.x = BOARD_WIDTH/2 - (this.width/2 * HEX_SIZE * 2 * 1.18); // uhhg. I need to figure this out better. probably won't work for sizes other than 11.
+				this.origin.x = this.game.dimensions.width/2 - (this.width/2 * this.hexSize * 2 * 1.18); // uhhg. I need to figure this out better. probably won't work for sizes other than 11.
 			}		
 
 			if (context.origin.y === "center") {
-				this.origin.y = BOARD_HEIGHT - BOARD_HEIGHT/2 - (this.height * HEX_SIZE)/2;
+				this.origin.y = this.game.dimensions.height - this.game.dimensions.height/2 - (this.height * this.hexSize)/2;
 			}
 
 			for (q = 0; q < this.width; q++) {
@@ -297,39 +213,39 @@ function HexGrid(context) {
 					var hexEntityBlue = undefined;
 					var hexEntities = [];
 					if (q === 0 ) {
-						hexEntityRed = game.redGoalLeft; 
+						hexEntityRed = this.game.entities.redGoalLeft; 
 						this.entities.push(hexEntityRed);
 						hexEntities.push(hexEntityRed);
 					} else if(q === this.width - 1) {
-						hexEntityRed = game.redGoalRight; 
+						hexEntityRed = this.game.entities.redGoalRight; 
 						this.entities.push(hexEntityRed);
 						hexEntities.push(hexEntityRed);						
 					} 
 					if (r === 0) {
-						hexEntityBlue = game.blueGoalTop; 
+						hexEntityBlue = this.game.entities.blueGoalTop; 
 						this.entities.push(hexEntityBlue);
 						hexEntities.push(hexEntityBlue);
 					} else if(r === this.height - 1) {
-						hexEntityBlue = game.blueGoalBottom; 
+						hexEntityBlue = this.game.entities.blueGoalBottom; 
 						this.entities.push(hexEntityBlue);
 						hexEntities.push(hexEntityBlue);
 					}
-					this.Hexes["q"+q+"r"+r] = new Hex(q, r /*, x, y*/, this.origin, hexEntities, this.hexType);
+					this.Hexes["q"+q+"r"+r] = new Hex({q: q, r: r, board: this, origin: this.origin, entities: hexEntities, type: this.hexType, hexSize: this.hexSize, style: this.hexStyle});
 
-					if(hexEntityRed === game.redGoalLeft) {
-						game.goalHexes["red"]["left"].push(this.Hexes["q"+q+"r"+r]);
+					if(hexEntityRed === this.game.entities.redGoalLeft) {
+						this.game.entities.goalHexes["red"]["left"].push(this.Hexes["q"+q+"r"+r]);
 					}
 
-					if(hexEntityRed === game.redGoalRight) {
-						game.goalHexes["red"]["right"].push(this.Hexes["q"+q+"r"+r]);
+					if(hexEntityRed === this.game.entities.redGoalRight) {
+						this.game.entities.goalHexes["red"]["right"].push(this.Hexes["q"+q+"r"+r]);
 					}
 
-					if(hexEntityBlue === game.blueGoalTop) {
-						game.goalHexes["blue"]["top"].push(this.Hexes["q"+q+"r"+r]);
+					if(hexEntityBlue === this.game.entities.blueGoalTop) {
+						this.game.entities.goalHexes["blue"]["top"].push(this.Hexes["q"+q+"r"+r]);
 					}
 
-					if(hexEntityBlue === game.blueGoalBottom) {
-						game.goalHexes["blue"]["bottom"].push(this.Hexes["q"+q+"r"+r]);
+					if(hexEntityBlue === this.game.entities.blueGoalBottom) {
+						this.game.entities.goalHexes["blue"]["bottom"].push(this.Hexes["q"+q+"r"+r]);
 					}															
 				}
 			}		
@@ -337,7 +253,7 @@ function HexGrid(context) {
 			for (q = 0; q < arr.length; q++) {
 				for (r = -Math.floor(q/2); r < arr[q].length - Math.floor(q/2); r++) {
 					datum = arr[q][r + Math.floor(q/2)];
-					this.Hexes["q"+q+"r"+r] = new Hex(q, r, {"x": 40, "y": 40}, datum.entities);
+					this.Hexes["q"+q+"r"+r] = new Hex({q: q, r: r, board: this, origin: {"x": 40, "y": 40}, entities: datum.entities, hexSize: this.hexSize, style: this.hexStyle});
 					for(var i = 0; i < datum.entities.length; i++) {
 						this.entities["q"+q+"r"+r+"e"+i] = {"entity": datum.entities[i], "location": "q"+q+"r"+r};
 					}
@@ -345,7 +261,7 @@ function HexGrid(context) {
 			}
 		} else if(context.mapType === "load" && context.mapLoad === "json") {
 			for (d in data) {
-				this.Hexes[d] = new Hex(data[d].q, data[d].r, {"x": 40, "y": 40}, data[d].entities);
+				this.Hexes[d] = new Hex({q: data[d].q, r: data[d].r, board: this, origin: {"x": 40, "y": 40}, entities: data[d].entities, hexSize: this.hexSize, style: this.hexStyle});
 			}
 		}
 	}
@@ -370,7 +286,6 @@ HexGrid.prototype.draw = /* null */ function(/* name of element to attach drawin
 	}
 	
 	d.select(".guard").remove();
-	//console.log(d.select("."+board).node());
 	if(!d.select("."+board).node()) {
 		var a = d.select(parent).append("g")
 	  			.attr("class", board)
@@ -389,19 +304,79 @@ HexGrid.prototype.draw = /* null */ function(/* name of element to attach drawin
 	//  .attr("width", this.rect.width)
 	//  .attr("height", this.rect.height)
 	//  .attr("class", "guard");
-	//console.log(this.Hexes["q0r0"].origin);
 	
 }
 
 //board = new HexGrid(new Rect(new Point(0, 0), new Point(BOARD_WIDTH, BOARD_HEIGHT)));
-
 //board = new HexGrid({mapType: "rect", mapOrient: "vertical", width: 6, height: 6});
-
 //board = new HexGrid({mapType: "load", mapLoad: "jsonArray"});
 
 
 
-board.draw();
+function Game() {
+	this.entities = [];
+	this.entities.redPlayer = {"id": this.entities.length, "color": "red"};
+	this.entities.bluePlayer = {"id": this.entities.length, "color": "blue"};
+	this.entities.currentPlayer = this.entities.redPlayer;
+	this.entities.lockedEntity = {"id": this.entities.length, "locked": true}; // will this.entities.length change when removing entities (in general, not for this entity)? I don't think so they way JS arrays work.
+	this.entities.redGoalLeft = {"id": this.entities.length, "goal": "red"};
+	this.entities.redGoalRight = {"id": this.entities.length, "goal": "red"};
+	this.entities.blueGoalTop = {"id": this.entities.length, "goal": "blue"};
+	this.entities.blueGoalBottom = {"id": this.entities.length, "goal": "blue"};
+	this.entities.goalHexes = {"id": this.entities.length, "red": {"left": [], "right": []}, "blue": {"top": [], "bottom": []}};
+	this.entities.goalHexes.red.start = this.entities.goalHexes.red.left;
+	this.entities.goalHexes.blue.start = this.entities.goalHexes.blue.top;
+	this.entities.goalHexes.red.end = this.entities.goalHexes.red.right;
+	this.entities.goalHexes.blue.end = this.entities.goalHexes.blue.bottom;
+	this.entities.checkedHexes = [];
+	this.entities.checkedEntity = {"id": this.entities.length, "checked": true};
+	this.dimensions = this.getInnerDimensions();
+	this.resizeBoard(this.dimensions);
+	window.addEventListener("resize", this.resizeBoard, false);
+
+	this.board = new HexGrid({mapType: "rhomb", width: 11, height: 11, origin: {x: "center", y: 80}, hexType: "point-top", game: this});
+	this.board.draw();
+}
+
+Game.prototype.getInnerDimensions = function() {
+	var new_board_width = "innerWidth" in window ? window.innerWidth : document.documentElement.offsetWidth;
+	var new_board_height = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;	
+	return {width: new_board_width, height: new_board_height};	
+}
+
+Game.prototype.resizeBoard = function(dimensions) {
+	this.dimensions = dimensions || this.getInnerDimensions();
+	var playArea = document.getElementsByClassName("playArea")[0];
+	playArea.setAttribute("width", this.dimensions.width);
+	playArea.setAttribute("height", this.dimensions.height);
+}	
+
+
+Game.prototype.checkVictory = function(player, currentHex) {
+	var victory = false;
+	if (currentHex && currentHex.entities.indexOf(player) !== -1) {
+		var neighbors = currentHex.getNeighbors();
+		if (game.entities.checkedHexes.indexOf(currentHex) === -1) {
+			currentHex.entities.push(game.entities.checkedEntity);
+			game.entities.checkedHexes.push(currentHex);
+			currentHex.draw();
+			if (this.entities.goalHexes[player.color].end.indexOf(currentHex) !== -1) {
+				victory = true;
+			} else {
+				for (var neighbor in neighbors) {
+					victory = this.checkVictory(player, neighbors[neighbor]);
+					if (victory === true) {
+						break;
+					}
+				}
+			}
+		}
+	}
+	return victory;
+}
+
+
+game = new Game();
 
 var pointerStart, pointerEnd, pointerDistance, dragInterval;
 
@@ -411,24 +386,6 @@ document.addEventListener('mousemove', function(e){
     mouse.x = e.clientX || e.pageX; 
     mouse.y = e.clientY || e.pageY;
 }, false);
-
-// http://javascript.about.com/od/byexample/a/events-mousebutton-example.htm
-whichButton = function(e) {
-	var e = e || window.event;
-	var left, right, middle, b;	
-	if (e.which) {
-		left = (e.which == 1);		
-		middle = (e.which == 2);
-		right = (e.which == 3);
-	} else if (e.button) { // for IE style button (1,4,2). Might need better browser detection.
-		b = e.button;
-		middle = Math.floor(b/4);
-		b %= 4;
-		right = Math.floor(b/2);
-		left = b%2;
-	}
-	return {'left' : left, 'right': right, 'middle': middle};
-};
 
 document.getElementsByClassName("playArea")[0].addEventListener('mousedown', function(e) {
 	if(equal(whichButton(e), {'left': 0, 'right': 1, 'middle': 0})) {
@@ -446,7 +403,7 @@ document.getElementsByClassName("playArea")[0].addEventListener('mousedown', fun
 	target = e.srcElement || e.target;
 	if(equal(whichButton(e), {'left': 1, 'right': 0, 'middle': 0}) && target.className.baseVal.indexOf("hex") > -1) {
 		var hexId = target.id;
-		var hexNode = board.Hexes[hexId];
+		var hexNode = game.board.Hexes[hexId];
 		d3.select("#g-" + hexId + " .info").remove();
 		var infoBox = d3.select("#g-" + hexId)
 			.append("foreignObject")
@@ -465,62 +422,15 @@ document.getElementsByClassName("playArea")[0].addEventListener('mousedown', fun
 	}
 });
 
-function Game() {
-	this.entities = [];
-	this.redPlayer = {"color": "red"};
-	this.bluePlayer = {"color": "blue"};
-	this.currentPlayer = this.redPlayer;
-	this.lockedEntity = {"id": this.entities.length, "locked": true}; // will this.entities.length change when removing entities (in general, not for this entity)? I don't think so they way JS arrays work.
-	this.redGoalLeft = {"id": this.entities.length, "goal": "red"};
-	this.redGoalRight = {"id": this.entities.length, "goal": "red"};
-	this.blueGoalTop = {"id": this.entities.length, "goal": "blue"};
-	this.blueGoalBottom = {"id": this.entities.length, "goal": "blue"};
-	this.goalHexes = {"red": {"left": [], "right": []}, "blue": {"top": [], "bottom": []}};
-	this.goalHexes.red.start = this.goalHexes.red.left;
-	this.goalHexes.blue.start = this.goalHexes.blue.top;
-	this.goalHexes.red.end = this.goalHexes.red.right;
-	this.goalHexes.blue.end = this.goalHexes.blue.bottom;
-	this.checkedHexes = [];
-	this.checkedEntity = {"checked": true};
-}
-
-
-Game.prototype.checkVictory = function(player, currentHex) {
-	var victory = false;
-	if (currentHex && currentHex.entities.indexOf(player) !== -1) {
-		var neighbors = currentHex.getNeighbors();
-		if (game.checkedHexes.indexOf(currentHex) === -1) {
-			currentHex.entities.push(game.checkedEntity);
-			game.checkedHexes.push(currentHex);
-			currentHex.draw();
-			if (this.goalHexes[player.color].end.indexOf(currentHex) !== -1) {
-				victory = true;
-			} else {
-				for (var neighbor in neighbors) {
-					console.log(neighbor);
-					if(neighbors[neighbor] === undefined) console.log(neighbors + " " + neighbor);
-					if(neighbors[neighbor].q === 1 && neighbors[neighbor].r === 3) console.log("hello");
-					victory = this.checkVictory(player, neighbors[neighbor]);
-					if (victory === true) {
-						break;
-					}
-				}
-			}
-		}
-	}
-	return victory;
-}
 
 window.addEventListener('wheel', function (e){
-	console.log(e);
-	HEX_SIZE += e.wheelDeltaY/12;
-	HEX_SIZE = HEX_SIZE > 0 ? HEX_SIZE : 10;
-	HEX_BORDER_WIDTH = (HEX_SIZE/10);
-	for (hex in board.Hexes) {
-		board.Hexes[hex].size = HEX_SIZE;
-		board.Hexes[hex].style["stroke-width"] = HEX_BORDER_WIDTH;
+	game.board.hexSize += e.wheelDeltaY/12;
+	game.board.hexSize = game.board.hexSize > 0 ? game.board.hexSize : 10;
+	for (hex in game.board.Hexes) {
+		game.board.Hexes[hex].size = game.board.hexSize;
+		game.board.Hexes[hex].style["stroke-width"] = game.board.hexSize/10;
 	}
-	board.draw();
+	game.board.draw();
 
 }, false);
 
@@ -566,44 +476,44 @@ document.getElementById("svg_button").addEventListener("load",function(){
 
 document.getElementsByClassName("playArea")[0].addEventListener('mousedown', function (e) {
 	target = e.srcElement || e.target;
-	board.draw();
+	game.board.draw();
 	if(equal(whichButton(e), {'left': 1, 'right': 0, 'middle': 0}) && target.className.baseVal.indexOf("hex") > -1) {
-		var newEntity = {"id": board.entities.length, "player": game.currentPlayer};
-		if(board.Hexes[target.id].entities.indexOf(game.lockedEntity) === -1) {
-			board.Hexes[target.id].entities.push(newEntity);
-			board.Hexes[target.id].entities.push(game.currentPlayer);
-			board.Hexes[target.id].entities.push(game.lockedEntity);
-			board.Hexes[target.id].draw();
+		var newEntity = {"id": game.board.entities.length, "player": game.entities.currentPlayer};
+		if(game.board.Hexes[target.id].entities.indexOf(game.entities.lockedEntity) === -1) {
+			game.board.Hexes[target.id].entities.push(newEntity);
+			game.board.Hexes[target.id].entities.push(game.entities.currentPlayer);
+			game.board.Hexes[target.id].entities.push(game.entities.lockedEntity);
+			game.board.Hexes[target.id].draw();
 			//game.checkedHexes = [];
-			for(goalHex in game.goalHexes[game.currentPlayer.color]["start"]) {
-				game.checkedHexes = [];
-				for(hex in board.Hexes) {
-					var index = board.Hexes[hex].entities.indexOf(game.checkedEntity);
+			for(goalHex in game.entities.goalHexes[game.entities.currentPlayer.color]["start"]) {
+				game.entities.checkedHexes = [];
+				for(hex in game.board.Hexes) {
+					var index = game.board.Hexes[hex].entities.indexOf(game.entities.checkedEntity);
 					if(index > -1) {
-						board.Hexes[hex].entities.splice(index, 1);
+						game.board.Hexes[hex].entities.splice(index, 1);
 					}
 				}
-				var victory = game.checkVictory(game.currentPlayer, game.goalHexes[game.currentPlayer.color]["start"][goalHex]);
+				var victory = game.checkVictory(game.entities.currentPlayer, game.entities.goalHexes[game.entities.currentPlayer.color]["start"][goalHex]);
 				if(victory === true) break;
 			}
-			if(victory) alert("" + game.currentPlayer.color + " won!");
+			if(victory) alert("" + game.entities.currentPlayer.color + " won!");
 			var playerTurn = document.querySelector(".turn .player");
-			playerTurn.classList.remove(game.currentPlayer.color);
-			game.currentPlayer = game.currentPlayer === game.bluePlayer ? game.redPlayer : game.bluePlayer;
-			playerTurn.innerHTML = game.currentPlayer.color;
-			playerTurn.classList.add(game.currentPlayer.color);
+			playerTurn.classList.remove(game.entities.currentPlayer.color);
+			game.entities.currentPlayer = game.entities.currentPlayer === game.entities.bluePlayer ? game.entities.redPlayer : game.entities.bluePlayer;
+			playerTurn.innerHTML = game.entities.currentPlayer.color;
+			playerTurn.classList.add(game.entities.currentPlayer.color);
 		}
 	}
 });
 
 
-dragmap = function(e) {
+var dragmap = function(e) {
 	pointerEnd = new Point(mouse.x, mouse.y);
-	for (hex in board.Hexes) {
-		board.Hexes[hex].origin.x +=  (pointerEnd.getX() - pointerStart.getX());
-		board.Hexes[hex].origin.y +=  (pointerEnd.getY() - pointerStart.getY());
+	for (hex in game.board.Hexes) {
+		game.board.Hexes[hex].origin.x +=  (pointerEnd.getX() - pointerStart.getX());
+		game.board.Hexes[hex].origin.y +=  (pointerEnd.getY() - pointerStart.getY());
 	}
 	pointerStart = new Point(mouse.x, mouse.y);
 
-	board.draw();
+	game.board.draw();
 }
