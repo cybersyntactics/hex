@@ -1,0 +1,875 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"for",
+				"for	for (…) {…}"
+			],
+			[
+				"create",
+				"createElement"
+			],
+			[
+				"tab",
+				"table-row"
+			],
+			[
+				"ins",
+				"insertBefore"
+			],
+			[
+				"cre",
+				"createElement"
+			],
+			[
+				"margin",
+				"margin-left"
+			],
+			[
+				"bo",
+				"border"
+			],
+			[
+				"padding",
+				"padding-left"
+			],
+			[
+				"cur",
+				"currentPlayer"
+			],
+			[
+				"th",
+				"thisPlayer"
+			],
+			[
+				"display",
+				"displayClass"
+			],
+			[
+				"get",
+				"getElementById"
+			],
+			[
+				"connections",
+				"connectionsCollection"
+			],
+			[
+				"crea",
+				"createFromHexString"
+			],
+			[
+				"arti",
+				"articleProvider"
+			],
+			[
+				"article",
+				"article_collection"
+			],
+			[
+				"artic",
+				"article_collection"
+			],
+			[
+				"req",
+				"require"
+			],
+			[
+				"art",
+				"article"
+			],
+			[
+				"ar",
+				"article"
+			],
+			[
+				"proto",
+				"prototype"
+			],
+			[
+				"write",
+				"writeHead"
+			],
+			[
+				"list-",
+				"list-style-type"
+			],
+			[
+				"getEl",
+				"getElementsByClassName"
+			],
+			[
+				"add",
+				"addEventListener"
+			],
+			[
+				"getE",
+				"getElementsByClassName"
+			],
+			[
+				"ad",
+				"addEventListener"
+			],
+			[
+				"tex-",
+				"text-decoration"
+			],
+			[
+				"he",
+				"height"
+			],
+			[
+				"inline",
+				"inline-block"
+			],
+			[
+				"append",
+				"appendChild"
+			],
+			[
+				"set",
+				"setAttribute"
+			],
+			[
+				"sty",
+				"list-style"
+			],
+			[
+				"qu",
+				"querySelector"
+			],
+			[
+				"backgr",
+				"background-color"
+			],
+			[
+				"font",
+				"font-family"
+			],
+			[
+				"player",
+				"player"
+			],
+			[
+				"pro",
+				"prototype"
+			],
+			[
+				"BOA",
+				"BOARD_HEIGHT"
+			],
+			[
+				"or",
+				"origin"
+			],
+			[
+				"M",
+				"Math"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "index.htm",
+			"settings":
+			{
+				"buffer_size": 1543,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "hex.js",
+			"settings":
+			{
+				"buffer_size": 20898,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Jon/Documents/dev/GitHub/Multris/index.htm",
+			"settings":
+			{
+				"buffer_size": 4552,
+				"line_ending": "Windows",
+				"name": "<html>"
+			}
+		},
+		{
+			"file": "/C/Users/Jon/Documents/dev/GitHub/Multris/game.js",
+			"settings":
+			{
+				"buffer_size": 501,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Jon/Documents/dev/GitHub/Multris/board.js",
+			"settings":
+			{
+				"buffer_size": 232,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Jon/Documents/dev/GitHub/Multris/rect.dev.js",
+			"settings":
+			{
+				"buffer_size": 1679,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Jon/Documents/dev/GitHub/Multris/renderer.dev.js",
+			"settings":
+			{
+				"buffer_size": 1060,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Jon/Documents/dev/GitHub/Multris/renderer.js",
+			"settings":
+			{
+				"buffer_size": 1054,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Jon/Documents/dev/GitHub/Multris/select.js",
+			"settings":
+			{
+				"buffer_size": 853,
+				"line_ending": "Windows",
+				"name": "function select(selector) {"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/Jon/Documents/dev/GitHub/hex/known-bugs.txt",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/package.json",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/index.js",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/ui.js",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/utils.js",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/dataProvider.js",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/articleprovider-mongodb.js",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/index.htm",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/style.css",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/package.json",
+		"/C/Users/Jon/Desktop/New Text Document (4).txt",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/MagicTouch-master/README.md",
+		"/C/Users/Jon/Documents/dev/heroku/node-js-getting-started/.env",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/hex.js",
+		"/C/Users/Jon/Documents/dev/heroku/node-js-getting-started/Procfile",
+		"/C/Users/Jon/Documents/dev/heroku/node-js-getting-started/package.json",
+		"/C/Users/Jon/Documents/dev/heroku/node-js-getting-started/index.js",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/MagicTouch-master/magictouch.js",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/hex.d3.js",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/hex.development.js",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/hex.working.js",
+		"/C/Users/Jon/Desktop/New Text Document (8).txt",
+		"/C/Users/Jon/Documents/dev/GitHub/LP/engine-master/engine-master/demos/city/load_model/index.html",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/server.js",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/node_modules/socket.io/node_modules/socket.io-client/socket.io.js",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/node_modules/socket.io/node_modules/has-binary-data/index.js",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/node_modules/socket.io/node_modules/socket.io-client/node_modules/has-binary-data/index.js",
+		"/C/Users/Jon/Documents/dev/GitHub/LP/server.js",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/node_modules/socket.io/node_modules/socket.io-client/index.js",
+		"/C/Users/Jon/Documents/dev/GitHub/hex/node_modules/socket.io/index.js",
+		"/C/Users/Jon/Desktop/redAlert.rtf",
+		"/C/Users/Jon/Documents/dev/GitHub/hex - Copy/hex.js",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/app.js",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/routes/index.js",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/articleprovider-mongodb-2.js",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/views/blog_new.jade",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/views/index-final.jade",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/views/blog_show-final.jade",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/public/stylesheets/style.styl",
+		"/C/Users/Jon/Documents/dev/GitHub/node-beginner/index.js",
+		"/C/Users/Jon/Documents/dev/GitHub/node-beginner/requestHandlers.js",
+		"/C/Users/Jon/Documents/dev/GitHub/node-beginner/router.js",
+		"/C/Users/Jon/Documents/dev/GitHub/node-beginner/server-2.js",
+		"/C/Users/Jon/Documents/dev/GitHub/chat-example/index.js",
+		"/C/Users/Jon/Documents/dev/GitHub/chat-example/index.html",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/sql-other.js",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/articleprovider-memory.js",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/routes/index-backup.js",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/routes/users.js",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/public/stylesheets/style.css",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/views/layout.jade",
+		"/C/Users/Jon/Documents/dev/GitHub/blog/views/index.jade",
+		"/C/Users/Jon/Desktop/howtonode/blog/app.js",
+		"/C/Users/Jon/Documents/dev/GitHub/node-beginner/formidable-test.js",
+		"/C/Users/Jon/Documents/dev/GitHub/node-beginner/server.js",
+		"/C/Program Files (x86)/Microsoft Games for Windows - LIVE/Client/Help/Help_en-US.htm",
+		"/C/Users/Jon/Documents/dev/GitHub/node-beginner/requestHanlders.js",
+		"/C/Users/Jon/Documents/dev/GitHub/LP/engine-master/engine-master/demos/boxes/index.html",
+		"/C/Users/Jon/Documents/dev/GitHub/chat-example/package.json",
+		"/C/Users/Jon/Documents/dev/GitHub/chat-example/node_modules/socket.io/package.json",
+		"/C/Users/Jon/Documents/dev/GitHub/chat-example/node_modules/express/package.json",
+		"/C/Users/Jon/Documents/lib/closure-compiler/world-compiled.js",
+		"/C/Users/Jon/Documents/lib/closure-compiler/world.js",
+		"/C/Users/Jon/Documents/GitHub/LP/engine-master/engine-master/build/output/playcanvas-latest.js",
+		"/C/Users/Jon/Documents/GitHub/LP/engine-master/engine-master/examples/assets/statue/Statue_1.json",
+		"/C/Users/Jon/Documents/GitHub/LP/engine-master/engine-master/build/dependencies.txt",
+		"/C/Users/Jon/dev/projects/Hex/Hex.html",
+		"/C/Users/Jon/Documents/GitHub/hex/milestones.txt",
+		"/C/Users/Jon/dev/projects/LD29/Hex.pm.html",
+		"/C/Users/Jon/Documents/GitHub/hex/index.html",
+		"/C/Users/Jon/dev/projects/Hex/server.js",
+		"/C/Users/Jon/dev/projects/LD29/Hex.html",
+		"/C/Users/Jon/dev/projects/Hex/Hex.old3.html",
+		"/C/Users/Jon/Downloads/[ www.Torrenting.com ] - El Topo 1970 BRRip XvidHD HC Eng SUBS 720p-NPW/READ this before playing the Movie.txt",
+		"/C/Users/Jon/dev/projects/LD29/rect.js",
+		"/C/Users/Jon/dev/projects/Hex/test.html",
+		"/C/Users/Jon/dev/projects/Hex/Hex2.html",
+		"/C/Users/Jon/Desktop/New Text Document (5).txt",
+		"/C/Users/Jon/dev/projects/Hex/Hex4.html",
+		"/C/Users/Jon/dev/projects/server.js",
+		"/C/Users/Jon/dev/personal/Hex/Hex.html",
+		"/E/Users/jonathan/Desktop/LD28/Hex/Hex.html",
+		"/C/Users/Jon/dev/projects/server.js.txt",
+		"/C/Users/Jon/AppData/Local/Temp/scp20676/var/www/hope/app/Model/ChallengeAnswer.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp52120/var/www/hope/app/Model/ChallengeQuestion.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp19730/var/www/hope/app/Controller/ChallengeAnswersController.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp16075/var/www/hope/app/View/ChallengeAnswers/index.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp05599/var/www/hope/app/.gitignore",
+		"/C/Users/Jon/AppData/Local/Temp/scp10459/var/www/hope/app/Controller/ChallengeQuestionsController.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp23478/var/www/hope/app/webroot/css/bootstrap.css",
+		"/C/Users/Jon/AppData/Local/Temp/scp10107/var/www/hope/app/View/ChallengeQuestions/view.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp38518/var/www/hope/app/View/ChallengeAnswers/add.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp38172/var/www/hope/CONTRIBUTING.md",
+		"/C/Users/Jon/AppData/Local/Temp/scp37084/var/www/hope/app/README.MD",
+		"/C/Users/Jon/AppData/Local/Temp/scp27679/var/www/hope/app/Controller/ChallengeAnswersController.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp37733/var/www/hope/app/Model/ChallengeAnswer.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp49221/var/www/hope/app/View/Challenges/index.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp12237/var/www/hope/app/View/ChallengeAnswers/index.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp19220/var/www/hope/app/Controller/ChallengesController.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp17868/var/www/hope/app/View/ChallengeAnswers/edit.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp29615/var/www/hope/app/View/ChallengeAnswers/view.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp05031/var/www/hope/app/View/Challenges/view.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp44065/var/www/hope/app/View/ChallengeQuestions/view.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp28550/var/www/hope/app/Controller/ChallengeAnswersController.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp05798/var/www/hope/app/Config/database.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp05414/var/www/hope/app/Console/cake.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp06151/var/www/hope/app/.gitignore",
+		"/C/Users/Jon/AppData/Local/Temp/scp12956/var/www/hope/app/View/ChallengeAnswers/add.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp53831/var/www/hope/app/View/Layouts/default.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp59802/var/www/hope/app/View/ChallengeAnswers/add.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp06984/var/www/hope/app/Controller/AppController.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp54108/var/www/hope/app/Controller/ChallengeQuestionsController.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp35751/var/www/hope/app/View/Challenges/index.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp14735/var/www/hope/app/View/ChallengeAnswers/index.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp27048/var/www/hope/app/View/ChallengeQuestions/index.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp00550/var/www/hope/app/View/Challenges/view.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp26657/var/www/hope/app/View/ChallengeQuestions/view.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp40510/var/www/hope/app/Config/database.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp13936/var/www/hope/app/View/ChallengeAnswers/view.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp05844/var/www/hope/app/View/ChallengeQuestions/add.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp56983/var/www/hope/app/View/ChallengeAnswers/add.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp31965/var/www/hope/app/View/ChallengeQuestions/edit.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp58287/var/www/hope/app/View/ChallengeAnswers/edit.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp17330/var/www/hope/app/webroot/css/bootstrap.css",
+		"/C/Users/Jon/AppData/Local/Temp/scp51811/var/www/hope/app/View/Layouts/default.ctp",
+		"/C/Users/Jon/AppData/Local/Temp/scp58686/var/www/hope/app/Controller/PagesController.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp56245/var/www/hope/app/Controller/AppController.php",
+		"/C/Users/Jon/AppData/Local/Temp/scp41763/var/www/hope/app/Model/ChallengeAnswer.php"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"C:\\Users\\Jon\\Documents\\dev\\GitHub\\hex",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"addChat",
+			"removeChat",
+			"info",
+			"gameSt",
+			"room",
+			"goalHexes",
+			"hexes",
+			"hex.",
+			"hex",
+			"draw",
+			"new Hex",
+			"hex",
+			"new Hex",
+			"getNeighbors",
+			"mode",
+			"board.game",
+			"game.bo",
+			"recursiveChe",
+			"gameId",
+			"emit",
+			"showModal",
+			"emit",
+			"io.",
+			"game joined",
+			"console",
+			"coll",
+			"gameStart",
+			"game.",
+			"updateT",
+			"selectH",
+			"updateTurn",
+			"find(",
+			"article_collection",
+			"ArticleProvider",
+			"main",
+			"io.",
+			"soc",
+			"target",
+			"target.id",
+			"moveMap",
+			"animID",
+			"moveMap",
+			"mouse",
+			"dragMap",
+			"pinchMap",
+			"touches.l",
+			"dragMap",
+			"updateMouse",
+			"remove",
+			"tocuh",
+			"dragMap",
+			"resizeBoard",
+			"hexSize",
+			"round",
+			"hexSize",
+			"OriginP",
+			"Origin",
+			"BOARD_WIDTH",
+			"new HexG",
+			"console.",
+			"(board.H",
+			"consol",
+			"game.entities.bo",
+			"game.",
+			"HEX_SIZE",
+			"HEX_BORDER_WIDTH",
+			"HEX_SIZE",
+			"HEX_FILL_COLOR",
+			"new Hex",
+			"HEX_BORDER_COLOR",
+			"entities:",
+			"board.",
+			"board",
+			"entities",
+			"BOARD_WIDTH",
+			"sqrt",
+			"cos",
+			"PI",
+			"draw",
+			"hex.draw",
+			"board.draw",
+			"board.Hexes",
+			"new Hex",
+			"this.game",
+			"game",
+			"this.game",
+			"game",
+			"BOARD_WIDTH",
+			"game",
+			"checkedEntity",
+			"goalHexes",
+			"checkedEntity",
+			"style",
+			"stroke-width",
+			"HEX_BORDER_WIDTH",
+			"HEX_SIZE",
+			"checked",
+			"goal",
+			"board",
+			"BOARD_HEIGHT",
+			".draw(",
+			"checkedHexes",
+			"console",
+			"checkedHexes",
+			"redGoalLeft",
+			"checkVictory",
+			"console",
+			"center",
+			"origin",
+			"playArea",
+			"log",
+			"getNeighbors",
+			"new H",
+			"origin",
+			"hex1",
+			"_x",
+			"getNeighbors",
+			"consol",
+			"hex1",
+			"HexGrid",
+			"user",
+			"');",
+			"scripts_for_layout",
+			"user",
+			".input.radio",
+			"legend",
+			"ChallengeQuestion",
+			"legend"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"collection_object",
+			"DataProvider"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 5,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "index.htm",
+					"settings":
+					{
+						"buffer_size": 1543,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								345,
+								166
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "hex.js",
+					"settings":
+					{
+						"buffer_size": 20898,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12890,
+								12908
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4765.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/C/Users/Jon/Documents/dev/GitHub/Multris/index.htm",
+					"settings":
+					{
+						"buffer_size": 4552,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4307,
+								4307
+							]
+						],
+						"settings":
+						{
+							"auto_name": "<html>",
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1287.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/C/Users/Jon/Documents/dev/GitHub/Multris/game.js",
+					"settings":
+					{
+						"buffer_size": 501,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								360,
+								360
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/C/Users/Jon/Documents/dev/GitHub/Multris/board.js",
+					"settings":
+					{
+						"buffer_size": 232,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								95,
+								95
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/C/Users/Jon/Documents/dev/GitHub/Multris/rect.dev.js",
+					"settings":
+					{
+						"buffer_size": 1679,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1376,
+								1376
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 39.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/C/Users/Jon/Documents/dev/GitHub/Multris/renderer.dev.js",
+					"settings":
+					{
+						"buffer_size": 1060,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								87,
+								90
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/C/Users/Jon/Documents/dev/GitHub/Multris/renderer.js",
+					"settings":
+					{
+						"buffer_size": 1054,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								133,
+								133
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "/C/Users/Jon/Documents/dev/GitHub/Multris/select.js",
+					"settings":
+					{
+						"buffer_size": 853,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								805,
+								805
+							]
+						],
+						"settings":
+						{
+							"auto_name": "function select(selector) {",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true
+}

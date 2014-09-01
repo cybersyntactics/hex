@@ -1,0 +1,6 @@
+- chat window expands in height unbounded. Can't set overflow: hidden on display: table
+- Drag looses focus when dragged over div's (chat window) and spans, causing dragging to stick (with right mouse button released) until left mouse button pressed.
+- Board not perfectly centered, rough approximation
+- index.js does not sync board sizes to the smallest dimenision of the two players, but just sets both's dimensions to the size of the second player to connect.
+- signifigant lag on mobile devices
+- pinch to zoom is better than before, but still not quite right

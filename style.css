@@ -9,7 +9,7 @@ body {
 	left: 0;
 }
 
-span {
+span, a {
 	font-family: Helvetica;
 	font-size: 18pt;
 	color: black;
@@ -27,13 +27,13 @@ span {
 	left: 0;
 }
 
-.title{
+.title, .title a {
 	font-size: 54pt;
 }
 
-.title a {
+.title a, a {
 	text-decoration: none;
-	color: black;	
+	color: black;
 }
 
 .author {
@@ -43,7 +43,51 @@ span {
 .gameInfo {
 	position: absolute;
 	right: 10%;
-	top: 5%;
+	top: 25px;
+}
+
+.gameControls {
+	position: relative;
+	margin: auto;
+	margin-top: 29px;
+	padding: 0;
+	vertical-align: middle;
+	display: block;
+	width: 170px;
+	font-size: 13pt;
+    text-shadow:
+    -1px -1px 0 #FFF,
+    1px -1px 0 #FFF,
+    -1px 1px 0 #FFF,
+    1px 1px 0 #FFF;	/* // http://stackoverflow.com/questions/4919076/outline-effect-to-text */ 	
+}
+
+.gameControls a {
+
+}
+
+.gameControls input, .gameControls a {
+	display: inline;
+	background-color: transparent;
+	border: 0;
+	margin: 0;
+	padding: 0;
+	font-size: 13pt;
+	padding: 0 5px;
+	border-left: 1px solid lightgrey;
+}
+
+.gameControls .first { /* change to (nth)-child or whatever */
+	/* padding-left: 0; */
+	border-left: 0;
+}
+
+.gameControls .selected {
+	text-decoration: underline;
+}
+
+#singlePlayerButton {
+	color: lightgrey;
 }
 
 .turn {
@@ -79,11 +123,11 @@ span {
     cursor: pointer;
 }
 
-.turn .player.red {
+.turn .player.red, .player.red {
 	color: red;
 }
 
-.turn .player.blue {
+.turn .player.blue, .player.blue {
 	color: blue;
 }
 
@@ -114,7 +158,60 @@ div#message .close {
 	font-family: Helvetica, sans-serif;
 	font-style: normal;
 	font-weight: bold;
+	font-size: 13pt;
 	text-decoration: none;
 	color: black;
 	line-height: .70;
+}
+
+/* http://stackoverflow.com/questions/526035/html-css-positioning-float-bottom */
+div#chatWindow {
+	position: absolute;
+	display: table;
+	table-layout: fixed;	
+	border-collapse: collapse;
+	bottom: 1em;
+	left: 0;
+	max-height: 1em;
+	max-width: 300px;
+	overflow: hidden;
+	text-overflow: clip;
+	font-size: 13pt;	
+}
+
+#chatWindow .row {
+	display: table-row;
+	vertical-align: bottom;
+	font-size: 13pt;
+	bottom: 0;
+}
+
+#chatWindow .player {
+	display: inline;
+	font-size: 13pt;
+}
+
+#chatCursor {
+	position: absolute;
+	font-size: 13pt;	
+	left: 0;
+	bottom: 0;
+}
+
+#chatInput {
+	position: absolute;
+	font-size: 13pt;
+	height: 1em;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	left: 1em;
+	bottom: 0;
+}
+
+/* http://stackoverflow.com/questions/3397113/how-to-remove-border-outline-around-text-input-boxes-chrome */
+/* I should say, I am not citing every bit of code I use, just when I think about it. This one is kind of
+   minor, but there are lots of other minor bits that aren't cited. */
+#chatInput:focus {
+	outline: 0;	
 }

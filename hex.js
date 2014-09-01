@@ -1,8 +1,10 @@
 /*
-*
-* Many thanks to http://www.redblobgames.com/grids/hexagons/ for the information on how to make hex grids!
-*
-*/
+ *
+ * Many thanks to http://www.redblobgames.com/grids/hexagons/ for the information on how to make hex grids!
+ *
+ */
+
+"Use strict"; //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope/Strict_mode
 
 function Hex(context) {  /* q, r, origin, entities, type, board */ 
 	this.q = context.q;
@@ -10,7 +12,9 @@ function Hex(context) {  /* q, r, origin, entities, type, board */
 	this.type = context.type || "flat-top";
 	this.entities = context.entities || [];
 	this.board = context.board;
-	this.origin = object(context.origin) || {"x": 0, "y" :0};
+	this.origin = context.origin || {"x": 0, "y" :0};
+	// See comment in dragmap.
+	//this.origin = context.origin || {"x": 0, "y" :0};
 	this.center = this.getHexCenter();
 	this.size = context.hexSize || HEX_SIZE;
 	this.style = context.style || {
@@ -19,6 +23,12 @@ function Hex(context) {  /* q, r, origin, entities, type, board */
 				  "fill": context.hexFillColor || HEX_FILL_COLOR
 				  };
 }
+
+/*
+
+Store entities in Game (or HexBoard? no?), Entities have .in(var) func, checks var for contrusctor name, if Hex, check if entity has position in hex. Game has .drawEntities(), .drawHexes(), etc. Board has .getNeighbors(hex), etc.
+
+*/
 
 Hex.prototype.label = function(text, style, offset) {
 
@@ -40,74 +50,71 @@ Hex.prototype.label = function(text, style, offset) {
 
 }
 
-Hex.prototype.draw = function(hex) {
-		var hex = hex || this;
-		var x = [], y = [];
-		var typeMod = this.type === "point-top" ? 0.5 : 0;
+Hex.prototype.draw = function(hex) { // This is going to need to either be moved to HexGrid, or to a seperate renderer object.
+	var hex = hex || this;
+	var x = [], y = [];
+	var typeMod = hex.type === "point-top" ? 0.5 : 0;
 
-		this.displayClasses = "";
+	hex.displayClasses = "";
 
-		hex.center = hex.getHexCenter();
-		for(i = 0; i < 6; i++) { // 0..5
-			angle = 2 * Math.PI / 6 * (i + typeMod);
-			x[i] = Math.round(hex.center.x + hex.size * Math.cos(angle));
-			y[i] = Math.round(hex.center.y + hex.size * Math.sin(angle));
+	hex.center = hex.getHexCenter();
+	for(i = 0; i < 6; i++) { // 0..5
+		angle = 2 * Math.PI / 6 * (i + typeMod);
+		x[i] = hex.center.x + hex.size * Math.cos(angle);
+		y[i] = hex.center.y + hex.size * Math.sin(angle);
+	}
+
+	pathTo = "M"+x[0]+","+y[0];
+	for(i = 1; i < 6; i++) {
+		pathTo += "L"+x[i]+","+y[i];
+	}
+	pathTo += "L"+x[0]+","+y[0];
+
+	hex.displayClasses.replace("checked ", "");
+	for(var i = 0; i < hex.entities.length; i++) {
+		if(typeof(hex.entities[i].displayClass) === "string") {
+			hex.displayClasses += " " + hex.entities[i].displayClass;
 		}
+	}
 
-		pathTo = "M"+x[0]+","+y[0];
-		//for each(i in x){ // for each depreciated, for of experimental // removed, need 1..5 not 0..5
-		for(i = 1; i < 6; i++) {
-			pathTo += "L"+x[i]+","+y[i];
-		}
-		pathTo += "L"+x[0]+","+y[0];
+    var svg   = document.querySelector(".playArea");
+	var svgNS = svg.namespaceURI;
+	var saNS = null; //setAtributeNS
 
-		d3.select("#g-q" + hex.q + "r" + hex.r).remove();
-	
-		var g = d3.select(".board")
-			.append("g")
-			.attr("id", "g-q" + hex.q + "r" + hex.r)
-			.attr("class", "hexGroup");
+	var g = document.querySelector(".board #g-q" + hex.q + "r" + hex.r);
+	if(!g) {
+		g = document.createElementNS(svgNS, "g");
+		g.setAttributeNS(saNS, "id", "g-q" + hex.q + "r" + hex.r);
+		g.setAttributeNS(saNS, "class", "hexGroup");
+		document.querySelector(".board").appendChild(g);
 
-		hex.displayClasses.replace("checked ", "");
-		// Needs to be made more generic (foreach(entity) { displayClass += " " + entity.class }) // pointers or copy entities?
-		for(var i = 0; i < hex.entities.length; i++) {
-			if(hex.entities[i].goal === "red") {
-				hex.displayClasses += "goal-red ";
-			}
-			if(hex.entities[i].goal === "blue") {
-				hex.displayClasses += "goal-blue ";
-			}			
-			if(hex.entities[i].player === this.board.game.entities.redPlayer) {
-				hex.displayClasses += "red locked ";
-			}
-			if(hex.entities[i].player === this.board.game.entities.bluePlayer) {
-				hex.displayClasses += "blue locked ";
-			}
+		var path = document.createElementNS(svgNS, "path");
+		path.setAttributeNS(saNS, "d",pathTo);
 
-			if(hex.entities[i].checked === true) {
-				hex.displayClasses += "checked ";
-			}
-		}
+		var clipPath = document.createElementNS(svgNS, "clipPath");
+		clipPath.setAttributeNS(saNS, "id", "c-q" + hex.q + "r" + hex.r);
+		clipPath.appendChild(path);
 
-		g.append("clipPath")
-			.attr("id", "c-q" + hex.q + "r" + hex.r)
-		 .append("path")
-			.attr("d", pathTo);
-		g.append("path")
-			.attr("d", pathTo)
-			.attr("class", "hex q" + hex.q + " r" + hex.r + " " + hex.displayClasses)
-			.attr("id", "q" + hex.q + "r" + hex.r)
-			.attr("clip-path", "url(#" + "c-q" + hex.q + "r" + hex.r +")")
-			.style("stroke-width", this.style["stroke-width"]);
+		g.appendChild(clipPath);
 
-		//this.label("" + Math.round(hex.q) + ", " + Math.round(hex.r) + "");
-		//this.label("" + Math.round(hex.center.x) + ", " + Math.round(hex.center.y) + "", {"font-size": "10px"}, {"x": 0, "y": 12.5});
+		var path = document.createElementNS(svgNS, "path");
+		path.setAttributeNS(saNS, "d",pathTo);
+		path.setAttributeNS(saNS, "class", "hex q" + hex.q + " r" + hex.r + " " + hex.displayClasses);
+		path.setAttributeNS(saNS, "id", "q" + hex.q + "r" + hex.r);
+		path.setAttributeNS(saNS, "clip-path", "url(#" + "c-q" + hex.q + "r" + hex.r +")");
+		path.setAttributeNS(saNS, "style", "stroke-width: "+hex.style["stroke-width"]+"px;");
 
-		// g.append("path")
-		// 	.attr("d", pathTo)
-		// 	.attr("class", "guard")
-		// 	.attr("clip-path", "url(#" + "c-q" + hex.q + "r" + hex.r +")");
+		g.appendChild(path);
+	} else {
+		document.querySelector("#c-q" + hex.q + "r" + hex.r + " path").setAttributeNS(saNS, "d", pathTo);
 
+		var path = document.querySelector("#q" + hex.q + "r" + hex.r);
+		path.setAttributeNS(saNS, "d", pathTo)
+		path.setAttributeNS(saNS, "class", "hex q" + hex.q + " r" + hex.r + " " + hex.displayClasses)
+		path.setAttributeNS(saNS, "id", "q" + hex.q + "r" + hex.r)
+		path.setAttributeNS(saNS, "clip-path", "url(#" + "c-q" + hex.q + "r" + hex.r +")")
+		path.setAttributeNS(saNS, "style", "stroke-width: "+hex.style["stroke-width"]+"px;");	
+	}
 }
 	
 Hex.prototype.getHexCenter = function(q, r, x, y){
@@ -145,37 +152,20 @@ Hex.prototype.showData = function(){
 		.attr("class", "hexGroup");
 }
 
-Hex.prototype.getNeighbors = function(hex) {
-	//if (!(hex instanceof Hex)) {
-	if(!hex) {
-		hex = this;
-	}
-		
-	var directions = [
-	   [+1,  0], [+1, -1], [0, -1],
-	   [-1,  0], [-1, +1], [0, +1]
-	]
-
-	var neighbors = [];
-
-	for(var i = 0; i < 6; i++) {
-		var d = directions[i];
-		var hexId = "q" + (hex.q + d[0]) + "r" + (hex.r + d[1]);
-		if(this.board.Hexes[hexId]) neighbors.push(this.board.Hexes[hexId]);
-	}		
-
-	return neighbors;
-}
-
 //function HexGrid(/* array */ map) {
 function HexGrid(context) {
 	this.Hexes = {};
 	this.entities = context.entities || [];
 	this.hexType = context.hexType || "flat-top";
 	this.origin = context.origin || {x: 0, y: 0};
-	this.game = context.game || game;
+	this.dimensions = context.dimensions;
 	this.hexSize = context.hexSize || 30;
 	this.hexStyle = context.style || {stroke: "black", "stroke-width": this.hexSize/10, fill: "white"};
+	this.hexWidth = this.hexType === "point-top" ? Math.sqrt(3) * this.hexSize : 2 * this.hexSize;
+	this.hexHeight = this.hexType === "point-top" ?  2 * this.hexSize : Math.sqrt(3) * this.hexSize;
+
+	var board = document.querySelector(".board");
+	if(board) board.parentNode.removeChild(board);
 
 	if(!!context) {
 		if(context.mapType === "rect") {
@@ -184,28 +174,45 @@ function HexGrid(context) {
 			if(context.mapOrient === "vertical") {
 				for (q = 0; q < this.height; q++) {
 					for (r = -Math.floor(q/2); r < this.width - Math.floor(q/2); r++) {
-						this.Hexes["q"+q+"r"+r] = new Hex({q: q, r: r, board: this, hexSize: this.hexSize, style: this.hexStyle});
+						this.Hexes["q"+q+"r"+r] = new Hex({q: q, r: r, hexSize: this.hexSize, style: this.hexStyle});
 					}
 				}
 			} else {
 				for (q = 0; q < this.height; q++) {
 					for (r = -Math.floor(q/2); r < this.width - Math.floor(q/2); r++) {
-						this.Hexes["q"+r+"r"+q] = new Hex({q: q, r: r, board: this, hexSize: this.hexSize, style: this.hexStyle});
+						this.Hexes["q"+r+"r"+q] = new Hex({q: q, r: r, hexSize: this.hexSize, style: this.hexStyle});
 					}
-				}				
+				}
 			}
 		} else if(context.mapType === "rhomb") {
 
 			this.width = !!context.width ? context.width : 2;
 			this.height = !!context.height ? context.height : 2;
 
+			/* not necessarily equal width/height, I like, but needs work. */
+			this.width = Math.min(11, Math.floor(this.dimensions.width / this.hexWidth));
+			this.height = Math.min(11, Math.floor(this.dimensions.height / this.hexHeight));
+
+			/* equal width and height */
+			if(this.width > this.height) {
+				this.width = this.height;
+			} else {
+				this.height = this.width;
+			}
+
 			if (context.origin.x === "center") {
-				this.origin.x = this.game.dimensions.width/2 - (this.width/2 * this.hexSize * 2 * 1.18); // uhhg. I need to figure this out better. probably won't work for sizes other than 11.
+				this.origin.x = Math.max((this.dimensions.width/2 - this.width/2 * this.hexWidth - Math.floor(this.height * Math.cos(2 * Math.PI / 6 * (1 + 0.5))) * this.hexWidth + this.hexWidth), this.dimensions.width/2 - this.width/2 * this.hexWidth * 1.18); // uhhg. I need to figure this (abitrary 1.18) out better. probably won't work for sizes other than 11.
 			}		
 
 			if (context.origin.y === "center") {
-				this.origin.y = this.game.dimensions.height - this.game.dimensions.height/2 - (this.height * this.hexSize)/2;
+				this.origin.y = this.dimensions.height - this.dimensions.height/2 - (this.height * this.hexSize)/2;
 			}
+
+			// reset goal entities incase board size changed.
+			this.entities.goalHexes["red"]["left"] = [];
+			this.entities.goalHexes["red"]["right"] = [];
+			this.entities.goalHexes["blue"]["top"] = [];
+			this.entities.goalHexes["blue"]["bottom"] = [];						
 
 			for (q = 0; q < this.width; q++) {
 				for (r = 0; r < this.height; r++) {
@@ -213,40 +220,40 @@ function HexGrid(context) {
 					var hexEntityBlue = undefined;
 					var hexEntities = [];
 					if (q === 0 ) {
-						hexEntityRed = this.game.entities.redGoalLeft; 
+						hexEntityRed = this.entities.redGoalLeft; 
 						this.entities.push(hexEntityRed);
 						hexEntities.push(hexEntityRed);
 					} else if(q === this.width - 1) {
-						hexEntityRed = this.game.entities.redGoalRight; 
+						hexEntityRed = this.entities.redGoalRight; 
 						this.entities.push(hexEntityRed);
-						hexEntities.push(hexEntityRed);						
+						hexEntities.push(hexEntityRed);	
 					} 
 					if (r === 0) {
-						hexEntityBlue = this.game.entities.blueGoalTop; 
+						hexEntityBlue = this.entities.blueGoalTop; 
 						this.entities.push(hexEntityBlue);
 						hexEntities.push(hexEntityBlue);
 					} else if(r === this.height - 1) {
-						hexEntityBlue = this.game.entities.blueGoalBottom; 
+						hexEntityBlue = this.entities.blueGoalBottom; 
 						this.entities.push(hexEntityBlue);
 						hexEntities.push(hexEntityBlue);
 					}
-					this.Hexes["q"+q+"r"+r] = new Hex({q: q, r: r, board: this, origin: this.origin, entities: hexEntities, type: this.hexType, hexSize: this.hexSize, style: this.hexStyle});
+					this.Hexes["q"+q+"r"+r] = new Hex({q: q, r: r, origin: this.origin, entities: hexEntities, type: this.hexType, hexSize: this.hexSize, style: this.hexStyle});
 
-					if(hexEntityRed === this.game.entities.redGoalLeft) {
-						this.game.entities.goalHexes["red"]["left"].push(this.Hexes["q"+q+"r"+r]);
+					if(hexEntityRed === this.entities.redGoalLeft) {
+						this.entities.goalHexes["red"]["left"].push(this.Hexes["q"+q+"r"+r]);
 					}
 
-					if(hexEntityRed === this.game.entities.redGoalRight) {
-						this.game.entities.goalHexes["red"]["right"].push(this.Hexes["q"+q+"r"+r]);
+					if(hexEntityRed === this.entities.redGoalRight) {
+						this.entities.goalHexes["red"]["right"].push(this.Hexes["q"+q+"r"+r]);
 					}
 
-					if(hexEntityBlue === this.game.entities.blueGoalTop) {
-						this.game.entities.goalHexes["blue"]["top"].push(this.Hexes["q"+q+"r"+r]);
+					if(hexEntityBlue === this.entities.blueGoalTop) {
+						this.entities.goalHexes["blue"]["top"].push(this.Hexes["q"+q+"r"+r]);
 					}
 
-					if(hexEntityBlue === this.game.entities.blueGoalBottom) {
-						this.game.entities.goalHexes["blue"]["bottom"].push(this.Hexes["q"+q+"r"+r]);
-					}															
+					if(hexEntityBlue === this.entities.blueGoalBottom) {
+						this.entities.goalHexes["blue"]["bottom"].push(this.Hexes["q"+q+"r"+r]);
+					}
 				}
 			}		
 		} else if(context.mapType === "load" && context.mapLoad === "jsonArray") {
@@ -265,9 +272,31 @@ function HexGrid(context) {
 			}
 		}
 	}
-	
+}
 
+HexGrid.prototype.getOriginHexOffsetFromCenter = function(hexId, dimensions, origin) {
+	// stub
+}
 
+HexGrid.prototype.getNeighbors = function(hex) {
+	if(!hex) {
+		hex = this;
+	}
+		
+	var directions = [
+	   [+1,  0], [+1, -1], [0, -1],
+	   [-1,  0], [-1, +1], [0, +1]
+	]
+
+	var neighbors = [];
+
+	for(var i = 0; i < 6; i++) {
+		var d = directions[i];
+		var hexId = "q" + (hex.q + d[0]) + "r" + (hex.r + d[1]);
+		if(this.Hexes[hexId]) neighbors.push(this.Hexes[hexId]);
+	}		
+
+	return neighbors;
 }
 
 HexGrid.prototype.draw = /* null */ function(/* name of element to attach drawing area to */ parent, 
@@ -290,21 +319,14 @@ HexGrid.prototype.draw = /* null */ function(/* name of element to attach drawin
 		var a = d.select(parent).append("g")
 	  			.attr("class", board)
 	 			.attr("width", this.width)
-	 			.attr("height", this.height);		
+	 			.attr("height", this.height);
 	} else {
 		var a = d.select("."+board);
 	}
 
-
 	for (hex in this.Hexes) {
 		this.Hexes[hex].draw();
 	}
-
-	// a.append("rect")
-	//  .attr("width", this.rect.width)
-	//  .attr("height", this.rect.height)
-	//  .attr("class", "guard");
-	
 }
 
 //board = new HexGrid(new Rect(new Point(0, 0), new Point(BOARD_WIDTH, BOARD_HEIGHT)));
@@ -319,172 +341,134 @@ function Game() {
 	this.entities.bluePlayer = {"id": this.entities.length, "color": "blue"};
 	this.entities.currentPlayer = this.entities.redPlayer;
 	this.entities.lockedEntity = {"id": this.entities.length, "locked": true}; // will this.entities.length change when removing entities (in general, not for this entity)? I don't think so they way JS arrays work.
-	this.entities.redGoalLeft = {"id": this.entities.length, "goal": "red"};
-	this.entities.redGoalRight = {"id": this.entities.length, "goal": "red"};
-	this.entities.blueGoalTop = {"id": this.entities.length, "goal": "blue"};
-	this.entities.blueGoalBottom = {"id": this.entities.length, "goal": "blue"};
+	this.entities.redGoalLeft = {"id": this.entities.length, "goal": "red", "displayClass": "goal-red"};
+	this.entities.redGoalRight = {"id": this.entities.length, "goal": "red", "displayClass": "goal-red"};
+	this.entities.blueGoalTop = {"id": this.entities.length, "goal": "blue", "displayClass": "goal-blue"};
+	this.entities.blueGoalBottom = {"id": this.entities.length, "goal": "blue", "displayClass": "goal-blue"};
 	this.entities.goalHexes = {"id": this.entities.length, "red": {"left": [], "right": []}, "blue": {"top": [], "bottom": []}};
 	this.entities.goalHexes.red.start = this.entities.goalHexes.red.left;
 	this.entities.goalHexes.blue.start = this.entities.goalHexes.blue.top;
 	this.entities.goalHexes.red.end = this.entities.goalHexes.red.right;
 	this.entities.goalHexes.blue.end = this.entities.goalHexes.blue.bottom;
 	this.entities.checkedHexes = [];
-	this.entities.checkedEntity = {"id": this.entities.length, "checked": true};
-	this.dimensions = this.getInnerDimensions();
+	this.entities.checkedEntity = {"id": this.entities.length, "checked": true, "displayClass": "checked"};
+	this.dimensions = this.getInnerDimensions(); //width, height
 	this.resizeBoard(this.dimensions);
-	window.addEventListener("resize", this.resizeBoard, false);
-
-	this.board = new HexGrid({mapType: "rhomb", width: 11, height: 11, origin: {x: "center", y: 80}, hexType: "point-top", game: this});
-	this.board.draw();
+	this.mouse = {x: 0, y: 0};
+	this.mode = "local multiplayer";
+	this.turn = 0;
+	var that = this;
+	window.addEventListener("resize", function(e) { that.resizeBoard(that.getInnerDimensions(), that) }, false);
 }
 
-Game.prototype.getInnerDimensions = function() {
-	var new_board_width = "innerWidth" in window ? window.innerWidth : document.documentElement.offsetWidth;
-	var new_board_height = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;	
-	return {width: new_board_width, height: new_board_height};	
-}
+Game.prototype = {
+	makeBoard: function(settings) {
+		if(typeof(settings) === "undefined") settings = {mapType: "rhomb", 
+														 width: 11, 
+														 height: 11, 
+														 origin: {x: "center", y: 80},
+														 dimensions: this.dimensions, 
+														 hexType: this.dimensions.width > this.dimensions.height ? "point-top" : "flat-top", 
+														 entities: this.entities};
+		// game.settings = settings; // entities contains multiple references which aren't properly being preserved in the conversion to json. I probably need to figure out a way to either send the actual js object (with references preserved) or convert the json back to a js obj.
+		this.entities.currentPlayer = this.entities.redPlayer;
+		settings.entities = this.entities;
+		this.settings = settings;
+		this.board = new HexGrid(settings);
+		this.board.draw();
+	},
 
-Game.prototype.resizeBoard = function(dimensions) {
-	this.dimensions = dimensions || this.getInnerDimensions();
-	var playArea = document.getElementsByClassName("playArea")[0];
-	playArea.setAttribute("width", this.dimensions.width);
-	playArea.setAttribute("height", this.dimensions.height);
-}	
+	getState: function() {
+		return {turn: this.turn, mode: this.mode, board: {Hexes: this.board.Hexes, width: this.width, height: this.height}, entites: this.entities};
+	},
 
+	getView: function() {
+		return {viewport: {origin: this.origin || this.board.origin, 
+						   dimensions: this.dimensions || this.board.dimensions, 
+						   mouse: this.mouse}, 
+				boardProperties: {hexType: this.board.hexType, 
+								  mapType: this.board.mapType, 
+								  dimensions: {width: this.board.width,
+								  			   height: this.board.height}},
+				style: this.board.style};
+	},
 
-Game.prototype.checkVictory = function(player, currentHex) {
-	var victory = false;
-	if (currentHex && currentHex.entities.indexOf(player) !== -1) {
-		var neighbors = currentHex.getNeighbors();
-		if (game.entities.checkedHexes.indexOf(currentHex) === -1) {
-			currentHex.entities.push(game.entities.checkedEntity);
-			game.entities.checkedHexes.push(currentHex);
-			currentHex.draw();
-			if (this.entities.goalHexes[player.color].end.indexOf(currentHex) !== -1) {
-				victory = true;
-			} else {
-				for (var neighbor in neighbors) {
-					victory = this.checkVictory(player, neighbors[neighbor]);
-					if (victory === true) {
-						break;
+	getInnerDimensions: function() {
+		var new_board_width = "innerWidth" in window ? window.innerWidth : document.documentElement.offsetWidth;
+		var new_board_height = "innerHeight" in window ? window.innerHeight : document.documentElement.offsetHeight;
+		return {width: new_board_width, height: new_board_height};
+	},
+
+	resizeBoard: function(dimensions, that) {
+		var that = that || this;
+		that.dimensions = dimensions || that.getInnerDimensions(); // Doesn't work in event hanlder. Needs work.
+		var playArea = document.getElementsByClassName("playArea")[0];
+		playArea.setAttribute("width", that.dimensions.width);
+		playArea.setAttribute("height", that.dimensions.height);
+	},
+
+	checkVictory: function(player, currentHex) {
+		var victory = false;
+		if (currentHex && currentHex.entities.indexOf(player) !== -1) {
+			var neighbors = this.board.getNeighbors(currentHex); // move to down here
+			if (game.entities.checkedHexes.indexOf(currentHex) === -1) {
+				currentHex.entities.push(game.entities.checkedEntity);
+				game.entities.checkedHexes.push(currentHex);
+				currentHex.draw(); // optional? maybe move to end of checkVictory or updateTurn?
+				if (this.entities.goalHexes[player.color].end.indexOf(currentHex) !== -1) {
+					victory = true;
+				} else {
+					// down here
+					for (var neighbor in neighbors) {
+						victory = this.checkVictory(player, neighbors[neighbor]);
+						if (victory === true) {
+							break;
+						}
 					}
 				}
 			}
 		}
-	}
-	return victory;
-}
+		return victory;
+	},
 
-
-game = new Game();
-
-var pointerStart, pointerEnd, pointerDistance, dragInterval;
-
-// http://stackoverflow.com/questions/2601097/how-to-get-the-mouse-position-without-events-without-moving-the-mouse
-var mouse = {x: 0, y: 0};
-document.addEventListener('mousemove', function(e){ 
-    mouse.x = e.clientX || e.pageX; 
-    mouse.y = e.clientY || e.pageY;
-}, false);
-
-document.getElementsByClassName("playArea")[0].addEventListener('mousedown', function(e) {
-	if(equal(whichButton(e), {'left': 0, 'right': 1, 'middle': 0})) {
-		pointerStart = new Point(e.clientX || e.pageX, e.clientY || e.pageY);
-		mouse = {x: e.clientX || e.pageX, y: e.clientY || e.pageY};
-		dragInterval = setInterval(dragmap, 10); // http://stackoverflow.com/questions/15978305/while-mousedown
-	}
-});
-
-document.getElementsByClassName("playArea")[0].addEventListener('mouseup', function(e) {
-	clearInterval(dragInterval); // http://stackoverflow.com/questions/15978305/while-mousedown
-});
-
-document.getElementsByClassName("playArea")[0].addEventListener('mousedown', function(e) {
-	target = e.srcElement || e.target;
-	if(equal(whichButton(e), {'left': 1, 'right': 0, 'middle': 0}) && target.className.baseVal.indexOf("hex") > -1) {
-		var hexId = target.id;
-		var hexNode = game.board.Hexes[hexId];
-		d3.select("#g-" + hexId + " .info").remove();
-		var infoBox = d3.select("#g-" + hexId)
-			.append("foreignObject")
-				.attr("class", "info")
-				.attr("x", hexNode.center.x)
-				.attr("y", hexNode.center.y)
-				.attr("width", 100)
-				.attr("height", 100)
-				.attr("requiredExtensions", "http://www.w3.org/1999/xhtml")
-			.append("xhtml:body")
-			.append("div");
-		for(var i = 0; i < hexNode.entities.length; i++) {
-			infoBox.append("pre")
-				.text(JSON.stringify(hexNode.entities[i]) + "\n");
+	resizeHexes: function(size, thisBoard) {
+		var boardObj = !!thisBoard ? thisBoard : game.board;
+		boardObj.hexSize = boardObj.hexSize > 0 ? boardObj.hexSize : 10;
+		// This is because .size is a primative so doesn't pass by reference. If it did we could just update the board.hexSize object and redraw and be done with it. I might switch .size to an object at some point.
+		for (hex in boardObj.Hexes) {
+			boardObj.Hexes[hex].size = boardObj.hexSize;
+			boardObj.Hexes[hex].style["stroke-width"] = boardObj.hexSize/10;
 		}
-	}
-});
+		boardObj.draw();
+	},
 
-
-window.addEventListener('wheel', function (e){
-	game.board.hexSize += e.wheelDeltaY/12;
-	game.board.hexSize = game.board.hexSize > 0 ? game.board.hexSize : 10;
-	for (hex in game.board.Hexes) {
-		game.board.Hexes[hex].size = game.board.hexSize;
-		game.board.Hexes[hex].style["stroke-width"] = game.board.hexSize/10;
-	}
-	game.board.draw();
-
-}, false);
-
-closeMessage = function (e) {
-		if(tmpDiv = document.querySelector("#message")) document.querySelector("body").removeChild(tmpDiv);
-}
-
-var svg_button = document.createElement("object");
-svg_button.setAttribute("data", "help.svg");
-svg_button.setAttribute("type", "image/svg+xml");
-svg_button.setAttribute("id", "svg_button");
-svg_button.setAttribute("width", "30px");
-svg_button.setAttribute("style", "top: -10px;");
-document.getElementsByClassName("instructions")[0].getElementsByTagName("a")[0].appendChild(svg_button);
-var img_button = document.createElement("img");
-img_button.setAttribute("width", "60px");
-img_button.setAttribute("height", "60px");
-
-document.getElementsByClassName("instructions")[0].getElementsByTagName("object")[0].appendChild(img_button);
-
-document.getElementById("svg_button").addEventListener("load",function(){
-	document.getElementById("svg_button").contentDocument.getElementById("svg_4").addEventListener('click', function (e) {
-		if(!(tmpDiv = document.querySelector("#message"))) {
-			var tmpDiv = document.createElement("div");
-			tmpDiv.setAttribute("id", "message");
-			tmpDiv.innerHTML = "<a href=\"#\" class=\"close\">X</a><div><h3>How to play:</h3><p>Click on hexes on your turn to fill them in. Red wins by creating an unbroken chain of red hexes from the left edge to the right edge (including light red hexes). Blue wins by creating an ubroken chain of blue hexes from the top edge to the bottom edge (including light blue hexes). The purple corner hexes count for either red or blue. Right click + drag to move the map around. Use the scroll wheel to zoom in and out.</p><h3>About:</h3><p>This was written mainly as a learning exercise. It should currently work in desktop sized webkit browsers.</p><h4>Versions:</h4><ul><li>0.4 - (current version) - local 2 player feature complete desktop version.</li><li>0.5 - Mobile friendly</li><li>0.6 - Single player (AI)</li><li>0.7 - Networked multiplayer</li><li>0.8 - General code refactoring (may also take place in earlier versions)</li><li> 0.9 - Beta (bugfixes only)</li><li>1.0 - Final release</li></div>";
-			document.querySelector("body").appendChild(tmpDiv);
-			document.querySelector("#message .close").addEventListener('click', closeMessage, false);	
-		} else {
-			document.querySelector("#message .close").removeEventListener('click', closeMessage, false);
-			closeMessage();
+	moveMap: function(pointerStart, pointerEnd, board) {
+		if(pointerStart === null || pointerStart === undefined) { pointerStart = new Point(game.mouse.x, game.mouse.y); }
+		pointerEnd = new Point(game.mouse.x, game.mouse.y);
+		board.origin.x += pointerEnd.getX() - pointerStart.getX();
+		board.origin.y += pointerEnd.getY() - pointerStart.getY();
+		// This method is better if hexes need individual origins (so if there are multiple layers of hexes within the same hexboard), but requires object(context.origin) in the Hex class which might be slower. Probably better to use seperate HexBoards anyway if there are multiple layers of hexes, but I wanted to document this incase it's needed later. 
+		/*
+		for (hex in game.board.Hexes) {
+			game.board.Hexes[hex].origin.x +=  (pointerEnd.getX() - pointerStart.getX());
+			game.board.Hexes[hex].origin.y +=  (pointerEnd.getY() - pointerStart.getY());
 		}
-	}, false);
+		*/
+		pointerStart = pointerEnd;
+		board.draw();
+		game.moveAnimID = requestAnimationFrame( function() { game.moveMap(pointerStart, pointerEnd, board); });
+	},
 
-	document.getElementById("svg_button").contentDocument.getElementById("svg_4").addEventListener('mouseover', function (e) {
-		document.getElementById("svg_button").contentDocument.getElementById("svg_4").style.cursor = "pointer";
-	}, false);	
-
-	document.getElementById("svg_button").contentDocument.getElementById("svg_4").addEventListener('mouseout', function (e) {
-		document.getElementById("svg_button").contentDocument.getElementById("svg_4").style.cursor = "default";
-	}, false);
-});
-
-document.getElementsByClassName("playArea")[0].addEventListener('mousedown', function (e) {
-	target = e.srcElement || e.target;
-	game.board.draw();
-	if(equal(whichButton(e), {'left': 1, 'right': 0, 'middle': 0}) && target.className.baseVal.indexOf("hex") > -1) {
-		var newEntity = {"id": game.board.entities.length, "player": game.entities.currentPlayer};
-		if(game.board.Hexes[target.id].entities.indexOf(game.entities.lockedEntity) === -1) {
-			game.board.Hexes[target.id].entities.push(newEntity);
-			game.board.Hexes[target.id].entities.push(game.entities.currentPlayer);
-			game.board.Hexes[target.id].entities.push(game.entities.lockedEntity);
-			game.board.Hexes[target.id].draw();
-			//game.checkedHexes = [];
+	selectHex: function(hexId) {
+		if(game.mode === "local multiplayer") game.entities.thisPlayer = game.entities.currentPlayer;
+		if(game.board.Hexes[hexId].entities.indexOf(game.entities.lockedEntity) === -1 
+			&& game.victory !== true /*&& game.entities.thisPlayer === game.entities.currentPlayer*/) {
+			this.turn++;
+			game.board.Hexes[hexId].entities.push({"id": game.board.entities.length, "player": game.entities.currentPlayer, "displayClass": game.entities.currentPlayer.color+" locked"});
+			game.board.Hexes[hexId].entities.push(game.entities.currentPlayer);
+			game.board.Hexes[hexId].entities.push(game.entities.lockedEntity);
+			game.board.Hexes[hexId].draw();
+			//game.entities.checkedHexes = [];
 			for(goalHex in game.entities.goalHexes[game.entities.currentPlayer.color]["start"]) {
 				game.entities.checkedHexes = [];
 				for(hex in game.board.Hexes) {
@@ -493,27 +477,77 @@ document.getElementsByClassName("playArea")[0].addEventListener('mousedown', fun
 						game.board.Hexes[hex].entities.splice(index, 1);
 					}
 				}
-				var victory = game.checkVictory(game.entities.currentPlayer, game.entities.goalHexes[game.entities.currentPlayer.color]["start"][goalHex]);
-				if(victory === true) break;
+				game.victory = game.checkVictory(game.entities.currentPlayer, game.entities.goalHexes[game.entities.currentPlayer.color]["start"][goalHex]);
+				if(game.victory === true) break;
 			}
-			if(victory) alert("" + game.entities.currentPlayer.color + " won!");
-			var playerTurn = document.querySelector(".turn .player");
-			playerTurn.classList.remove(game.entities.currentPlayer.color);
-			game.entities.currentPlayer = game.entities.currentPlayer === game.entities.bluePlayer ? game.entities.redPlayer : game.entities.bluePlayer;
-			playerTurn.innerHTML = game.entities.currentPlayer.color;
-			playerTurn.classList.add(game.entities.currentPlayer.color);
+			return true;
 		}
+	},
+
+	gameStart: function(multiplayer) {
+		if(multiplayer === "networked") {
+			this.mode = "networked";
+			socket.emit("find multiplayer", {settings: game.settings});
+		} else if (multiplayer === "AI") {
+			//socket.emit("start singleplayer");
+		} else {
+			socket.emit("cancel find multiplayer");
+			removeChat(game.entities.thisPlayer);
+			game.entities.thisPlayer = game.entities.currentPlayer;
+			game.makeBoard();
+			game.gameLoop(game.entities.currentPlayer);			
+			//socket.emit("start local multiplayer");
+		}
+
+	},
+
+	gameLoop: function(currentPlayer) {
+		if(this.mode === "networked") {
+			if(currentPlayer === this.entities.thisPlayer) {
+				 // when(this.selectHex()).then(updateTurn())
+ 			} else {
+ 				console.log('waiting for move...');
+ 				socket.once('move', function(msg) {
+ 					console.log('moved once', msg);
+ 					updateTurn(msg.hexID, msg.player);
+ 				});
+ 			}
+ 		} else {
+			game.entities.thisPlayer = game.entities.currentPlayer;
+ 		}
 	}
+
+}
+
+socket = io.connect('/room');
+socket.binaryType = 'blob'; // getting an error when emiting "move" (in ui.js right now). // https://github.com/Automattic/socket.io/issues/1645
+
+socket.on("error", function(object){
+	console.log("error", object);
+});
+socket.on("game joined", function(msg) {
+	console.log("game joined", msg);
+	//var msg = msg[1];
+	game.roomId = msg.roomId;
+	game.roomSize = msg.roomSize
+	game.gameId = msg.gameId;
+	if(msg.player === 'red') {
+		game.entities.thisPlayer = game.entities.redPlayer;
+	} else if(msg.player === 'blue') {
+		game.entities.thisPlayer = game.entities.bluePlayer;
+	} else if(msg === undefined) {
+		alert('no space available');
+	}
+	lookForSecondPlayer();
+});
+socket.on("game start", function(msg) {
+	console.log("game start", msg);
+	closeMessage();
+	addChat(game.entities.thisPlayer);	
+	game.makeBoard(msg.settings);
+	game.gameLoop(game.entities.currentPlayer);
 });
 
-
-var dragmap = function(e) {
-	pointerEnd = new Point(mouse.x, mouse.y);
-	for (hex in game.board.Hexes) {
-		game.board.Hexes[hex].origin.x +=  (pointerEnd.getX() - pointerStart.getX());
-		game.board.Hexes[hex].origin.y +=  (pointerEnd.getY() - pointerStart.getY());
-	}
-	pointerStart = new Point(mouse.x, mouse.y);
-
-	game.board.draw();
-}
+game = new Game();
+game.makeBoard();
+game.gameStart("local");

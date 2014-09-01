@@ -9,12 +9,24 @@
 	<div class="header">
 		<span class="title"><a href="https://en.wikipedia.org/wiki/Hex_(board_game)" target="_blank">H E X</a></span>
 	</div>
+	<div class="gameControls">
+		<!-- 
+		<input id="localMultiplayerButton" class="first" type="button" value="Local"/>
+		<input id="findMultiplayerButton" type="button" value="Online"/>
+		<input id="singlePlayerButton" type="button" disabled="true" value="A.I."/> 
+		-->
+		<a href="#" id="localMultiplayerButton" class="first selected control" type="button">Local</a><!--
+		--><a href="#" id="findMultiplayerButton" class="control">Online</a><!--
+		--><a id="singlePlayerButton" class="" disabled="true">A.I.</a>
+	</div>
 	<div class="gameInfo">
 		<span class="instructions"><a href="#instructions"></a></span>	
 		<span class="turn"><span class="player red">red</span>'s turn</span>
 	</div>
 </body>
 <script src="./d3.v3/d3.v3.min.js" charset="utf-8"></script>
+<script src="/socket.io/socket.io.js"></script>
 <script src="./rect.js"></script>
 <script src="./utils.js"></script>
+<script src="./ui.js"></script>
 <script src="./hex.js"></script>
