@@ -37,7 +37,16 @@ svg .hex.locked.checked.blue {
 svg .hex.locked.checked.red {
 	fill: darkred;
 }
+
+svg .hex.checked.blue {
+	fill: darkblue;
+}
+
+svg .hex.checked.red {
+	fill: darkred;
+}
 */
+
 
 /*
 svg .hex:hover {

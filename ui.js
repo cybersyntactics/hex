@@ -116,7 +116,13 @@ function updateTurn(hexID, player) {
 	if(player === undefined) player = game.entities.currentPlayer;
 	var hexSelected = game.selectHex(hexID);
 	if(game.board.Hexes[hexID] !== undefined && player.color === game.entities.currentPlayer.color && hexSelected ) {
-		if(game.victory) alert("" + game.entities.currentPlayer.color + " won!");
+		if(game.victory) {
+			if(game.mode === "networked") {
+				showModal("" + game.entities.currentPlayer.color + " won!");
+			} else {
+				alert("" + game.entities.currentPlayer.color + " won!");
+			}
+		}
 		var playerTurn = document.querySelector(".turn .player");
 		playerTurn.classList.remove(game.entities.currentPlayer.color);
 		if(game.mode === "networked" && game.entities.thisPlayer === game.entities.currentPlayer) { // Maybe take out "networked" and just emit events handled by backbone
@@ -141,6 +147,13 @@ function cancelLookForSecondPlayer() {
 	//closeModal();
 }
 
+document.getElementsByClassName("playArea")[0].addEventListener('click', function(e) {
+	if(equal(whichButton(e), {'left': 0, 'right': 1, 'middle': 0}) /*|| e.touches.length === 1*/) {
+		e.preventDefault(e);
+		console.log(e.preventDefault, e.preventDefault(e));
+		return false;
+	}
+});
 document.getElementsByClassName("playArea")[0].addEventListener('mousedown', function (e) {
 	var target = e.srcElement || e.target;
 	if(equal(whichButton(e), {'left': 1, 'right': 0, 'middle': 0}) && target.className.baseVal.indexOf("hex") > -1 && game.entities.thisPlayer === game.entities.currentPlayer) {
@@ -150,7 +163,10 @@ document.getElementsByClassName("playArea")[0].addEventListener('mousedown', fun
 document.addEventListener('mousemove', updateMouse, false);
 document.getElementsByClassName("playArea")[0].addEventListener('mousedown', function(e) {
 	if(equal(whichButton(e), {'left': 0, 'right': 1, 'middle': 0}) /*|| e.touches.length === 1*/) {
+		e.preventDefault(e);
+		console.log(e.preventDefault, e.preventDefault(e));
 		game.moveMap(null, new Point(game.mouse.x, game.mouse.y), game.board);
+		return false;
 	}
 });
 document.getElementsByClassName("playArea")[0].addEventListener('mouseup', function(e) {
@@ -165,7 +181,10 @@ document.getElementsByClassName("playArea")[0].addEventListener('touchcancel', f
 	//e.preventDefault();;
 }, false);
 window.addEventListener('wheel', function (e){
-	game.board.hexSize += e.wheelDeltaY/12;
+	//console.log(game.board.hexSize);
+	// game.board.hexSize += e.wheelDeltaY/12;
+	game.board.hexSize += e.deltaY/12;
+	//console.log(game.board.hexSize, e);
 	game.resizeHexes(game.board.hexSize, game.board);
 }, false);
 document.getElementsByClassName("playArea")[0].addEventListener('mousedown', function(e) {

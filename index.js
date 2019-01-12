@@ -8,7 +8,9 @@ var DataProvider = require('./dataProvider').DataProvider;
 
 var Provider = new DataProvider('localhost', 27017);
 
+app.set('port', 8080)
 app.use('/', express.static(__dirname));
+
 
 var players = ['red', 'blue']; // needs to be player objects, but player objects ID is based on game.entitites.length. Either write function to compare ignoring ID or need central server to track entity IDs.
 
@@ -48,8 +50,10 @@ io.of('/room').on('connection', function(socket) {
 	var player = "red";
 	var settings = null;
 
+	//console.log('connected', socket);
 
 	socket.on("find multiplayer", function(msg) {
+		//console.log('find multiplayer', msg);
 		settings = msg.settings;
 		Provider.db.collection('connections', function(err, connectionsCollection) {
 			connectionsCollection.findOne({roomSize: 1}, function(err, doc) {
@@ -69,10 +73,10 @@ io.of('/room').on('connection', function(socket) {
 
 					roomId = foundDoc.roomId;
 					gameId = foundDoc.gameId;
-					console.log(settings);
+					// console.log(settings);
 					settings.width = Math.min(foundDoc.settings.width, settings.width);
 					settings.height = Math.min(foundDoc.settings.height, settings.height);
-					console.log(settings);
+					// console.log(settings);
 
 					if(foundDoc.player === "red") player = "blue";
 
@@ -114,6 +118,6 @@ io.set('transports', ['polling']); // websockets are having trouble (wierd). Whe
 // See more here: http://stackoverflow.com/questions/17730369/connection-failed-from-client-to-server-in-socket-io and do more research!!
 
 
-http.listen(8080, function() {
+http.listen(app.get('port'), function() {
 	console.log('listening on *:8080');
 });

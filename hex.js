@@ -70,12 +70,15 @@ Hex.prototype.draw = function(hex) { // This is going to need to either be moved
 	}
 	pathTo += "L"+x[0]+","+y[0];
 
-	hex.displayClasses.replace("checked ", "");
+	//hex.displayClasses.replace("checked ", "");
 	for(var i = 0; i < hex.entities.length; i++) {
 		if(typeof(hex.entities[i].displayClass) === "string") {
 			hex.displayClasses += " " + hex.entities[i].displayClass;
 		}
 	}
+
+
+	//console.log(hex.displayClasses);
 
     var svg   = document.querySelector(".playArea");
 	var svgNS = svg.namespaceURI;
@@ -209,10 +212,18 @@ function HexGrid(context) {
 			}
 
 			// reset goal entities incase board size changed.
+			
+			/* // This does not work because it replaces the references used in goalHexes.red.start, etc.
 			this.entities.goalHexes["red"]["left"] = [];
 			this.entities.goalHexes["red"]["right"] = [];
 			this.entities.goalHexes["blue"]["top"] = [];
 			this.entities.goalHexes["blue"]["bottom"] = [];						
+			*/
+
+			this.entities.goalHexes["red"]["left"].splice(0,this.entities.goalHexes["red"]["left"].length);
+			this.entities.goalHexes["red"]["right"].splice(0,this.entities.goalHexes["red"]["right"].length);
+			this.entities.goalHexes["blue"]["top"].splice(0,this.entities.goalHexes["blue"]["top"].length);
+			this.entities.goalHexes["blue"]["bottom"].splice(0,this.entities.goalHexes["blue"]["bottom"].length);
 
 			for (q = 0; q < this.width; q++) {
 				for (r = 0; r < this.height; r++) {
@@ -350,6 +361,7 @@ function Game() {
 	this.entities.goalHexes.blue.start = this.entities.goalHexes.blue.top;
 	this.entities.goalHexes.red.end = this.entities.goalHexes.red.right;
 	this.entities.goalHexes.blue.end = this.entities.goalHexes.blue.bottom;
+	console.log(this.entities.goalHexes);
 	this.entities.checkedHexes = [];
 	this.entities.checkedEntity = {"id": this.entities.length, "checked": true, "displayClass": "checked"};
 	this.dimensions = this.getInnerDimensions(); //width, height
@@ -409,10 +421,12 @@ Game.prototype = {
 
 	checkVictory: function(player, currentHex) {
 		var victory = false;
+		//console.log(currentHex);
 		if (currentHex && currentHex.entities.indexOf(player) !== -1) {
 			var neighbors = this.board.getNeighbors(currentHex); // move to down here
 			if (game.entities.checkedHexes.indexOf(currentHex) === -1) {
 				currentHex.entities.push(game.entities.checkedEntity);
+				//console.log(currentHex.entities);
 				game.entities.checkedHexes.push(currentHex);
 				currentHex.draw(); // optional? maybe move to end of checkVictory or updateTurn?
 				if (this.entities.goalHexes[player.color].end.indexOf(currentHex) !== -1) {
@@ -422,6 +436,7 @@ Game.prototype = {
 					for (var neighbor in neighbors) {
 						victory = this.checkVictory(player, neighbors[neighbor]);
 						if (victory === true) {
+							//console.log(player.color + " won!");
 							break;
 						}
 					}
@@ -469,6 +484,7 @@ Game.prototype = {
 			game.board.Hexes[hexId].entities.push(game.entities.lockedEntity);
 			game.board.Hexes[hexId].draw();
 			//game.entities.checkedHexes = [];
+			//console.log(game.entities.goalHexes);
 			for(goalHex in game.entities.goalHexes[game.entities.currentPlayer.color]["start"]) {
 				game.entities.checkedHexes = [];
 				for(hex in game.board.Hexes) {
@@ -486,7 +502,9 @@ Game.prototype = {
 
 	gameStart: function(multiplayer) {
 		if(multiplayer === "networked") {
+			console.log('networked');
 			this.mode = "networked";
+			console.log(socket);
 			socket.emit("find multiplayer", {settings: game.settings});
 		} else if (multiplayer === "AI") {
 			//socket.emit("start singleplayer");
