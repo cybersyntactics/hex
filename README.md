@@ -12,3 +12,5 @@ Live demo: http://jonathanless.com/games/hex/index.htm
 3. > npm install
 
 4. > node index.js
+
+5. Navigate to localhost:8080/index.htm (or appropriate proxy).
