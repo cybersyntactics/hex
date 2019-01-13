@@ -119,6 +119,8 @@ function updateTurn(hexID, player) {
 		if(game.victory) {
 			if(game.mode === "networked") {
 				showModal("" + game.entities.currentPlayer.color + " won!");
+				socket.emit('victory', {player: game.entities.currentPlayer.color});
+
 			} else {
 				alert("" + game.entities.currentPlayer.color + " won!");
 			}
@@ -164,7 +166,7 @@ document.addEventListener('mousemove', updateMouse, false);
 document.getElementsByClassName("playArea")[0].addEventListener('mousedown', function(e) {
 	if(equal(whichButton(e), {'left': 0, 'right': 1, 'middle': 0}) /*|| e.touches.length === 1*/) {
 		e.preventDefault(e);
-		console.log(e.preventDefault, e.preventDefault(e));
+		//console.log(e.preventDefault, e.preventDefault(e));
 		game.moveMap(null, new Point(game.mouse.x, game.mouse.y), game.board);
 		return false;
 	}

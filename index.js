@@ -8,6 +8,7 @@ var DataProvider = require('./dataProvider').DataProvider;
 
 var Provider = new DataProvider('localhost', 27017);
 
+//app.enable('trust proxy')
 app.set('port', 8080)
 app.use('/', express.static(__dirname));
 
@@ -34,9 +35,12 @@ function leaveRoom(socket, sessionId, roomId, player) {
 	socket.to(roomId).emit('chat', {player: "system", msg: player + " has been disconnected"});
 	Provider.db.collection('connections', function(err, connectionsCollection) {
 			if(connectionsCollection) connectionsCollection.remove({sessionId: sessionId}, function(err, doc) {
-				if(doc) connectionsCollection.find({roomId: roomId}).toArray(function(err, docs) {
-					if(docs !== null && docs.length > 0) connectionsCollection.update({_id: docs[0]._id}, {$set:{roomSize: 1}}, function(err, doc) {
+				if(doc) connectionsCollection.find({$and: {roomId: roomId, roomSize: {$gt: 0}}}).toArray(function(err, docs) {
+					//if(err) console.log(err);
+					if(docs !== null && docs !== undefined && docs.length > 0) connectionsCollection.update({_id: docs[0]._id}, {$inc:{roomSize: -1}}, function(err, doc) {
 						//console.log("update ", err, doc);
+						socket.to(roomId).emit('disconnect');
+
 					});
 				});
 			});
@@ -112,6 +116,13 @@ io.of('/room').on('connection', function(socket) {
 		});
 		socket.to(msg.roomId).emit("move", {hexID: msg.hexID, player: msg.player});
 	});
+
+	socket.on("victory", function(msg) {
+		socket.to(roomId).emit('chat', {player: "system", msg: msg.player + " has won!"});
+		Provider.db.collection('games', function(err, gamesCollection) {
+			gamesCollection.update({gameId: gameId}, {"$push":{hexID: msg.hexID, player: msg.player, victory: true}});
+		});
+	})
 });
 
 io.set('transports', ['polling']); // websockets are having trouble (wierd). When client tries to recieve "game joined", it works, but it resets the connection without this line. 
